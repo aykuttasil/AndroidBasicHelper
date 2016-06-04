@@ -2,4 +2,4 @@
 
 Android Helper
 
-Gradle : compile 'com.aykuttasil:androidbasichelper:1.0.0'
+Gradle : compile 'com.aykuttasil:androidbasichelper:1.0.1'
