@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.media.RingtoneManager;
 import android.net.Uri;
+import android.service.carrier.CarrierIdentifier;
 import android.support.v7.app.NotificationCompat;
 
 import java.util.Random;
@@ -31,19 +32,17 @@ public class NotificationHelper {
     }
 
 
-    public static Notification newInstance(Context context) {
-        return new NotificationHelper(context).mNotification;
-
-    }
-
-    public static NotificationCompat.Builder newInstance(Context context, int a, int b) {
-        return new NotificationHelper(context).mBuilder;
-
-    }
-
-    public static NotificationHelper newInstance(Context context, int a) {
+    public static NotificationHelper newInstance(Context context) {
         return new NotificationHelper(context);
 
+    }
+
+    public android.support.v4.app.NotificationCompat.Builder getBuilder() {
+        return mBuilder;
+    }
+
+    public Notification getNotification() {
+        return mNotification;
     }
 
     public static void showSimpleNotification(String title, String text, int icon, int notifId) {
@@ -62,11 +61,18 @@ public class NotificationHelper {
         notificationManager.notify(notifId, mNotification);
     }
 
-    public static void showNotificationMessage(Class mClass, Context context, String title, String message, int notifId, Intent intent) {
+    /**
+     * @param context
+     * @param title
+     * @param message
+     * @param notifId
+     * @param intent
+     */
+    public static void showNotificationMessage(Context context, String title, String message, int notifId, Intent intent) {
 
 
         if (intent == null) {
-            intent = new Intent(context, mClass);
+            intent = new Intent(context, context.getClass());
         }
         int icon = R.drawable.ok;
 
@@ -151,9 +157,6 @@ public class NotificationHelper {
         */
     }
 
-    public Notification getNotification() {
-        return mNotification;
-    }
 
     public NotificationHelper setNotifTitle(String title) {
         mBuilder.setContentTitle(title);

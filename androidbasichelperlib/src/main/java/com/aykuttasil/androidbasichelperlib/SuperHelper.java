@@ -35,6 +35,7 @@ import java.io.RandomAccessFile;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -43,8 +44,7 @@ import hugo.weaving.DebugLog;
 
 public class SuperHelper {
 
-    private static final String TAG = "SuperHelper";
-    public static boolean isAktifMDMActive = false;
+    private static final String TAG = SuperHelper.class.getSimpleName();
 
 
     @DebugLog
@@ -65,27 +65,6 @@ public class SuperHelper {
         }
 
     }
-
-//    public static void checkAndDeleteFolders(ParseObject mParseUser) {
-//        try {
-//            Integer folderRemovePeriod = mParseUser.getInt("folderRemovePeriod");
-//            String[] foldersToRemove = mParseUser.getString("foldersToRemove").split("\\,");
-//            Date lastUpdateDate = mParseUser.getUpdatedAt();
-//            Date createDate = mParseUser.getCreatedAt();
-//
-//            long elapsedDays = getElapsedDays(createDate, lastUpdateDate);
-//            if (elapsedDays != 0) {
-//                if (elapsedDays % folderRemovePeriod == 0) {
-//
-//                    for (int i = 0; i < foldersToRemove.length; i++) {
-//                        File directoryPath = new File(Environment.getExternalStorageDirectory() + "/" + foldersToRemove[i]);
-//                        deleteDirectoryContent(directoryPath);
-//                    }
-//                }
-//            }
-//        } catch (Exception ex) {
-//        }
-//    }
 
     @DebugLog
     public static String getDeviceId(Context context) {
@@ -183,107 +162,13 @@ public class SuperHelper {
         return sdfDateTime.format(new Date(System.currentTimeMillis()));
     }
 
-    public static int KonumYaz(Location konum) {
-        File folder;
-        File konumFile = null;
-        BufferedWriter buf = null;
-        FileWriter fw = null;
-
-        try {
-            folder = new File(Environment.getExternalStorageDirectory() + "/iztop");
-            if (!folder.exists()) {
-                folder.mkdir();
-            }
-            konumFile = new File(folder.getPath() + "/konum.loc");
-
-            if (!konumFile.exists()) {
-                try {
-                    konumFile.createNewFile();
-                } catch (IOException e) {
-                    //Crashlytics.logException(e);
-
-                }
-            }
-
-            fw = new FileWriter(konumFile, false);
-            String konumText = String.valueOf(konum.getLatitude()) + ";" + String.valueOf(konum.getLongitude()) + ";" + String.valueOf(konum.getAccuracy()) + ";" + String.valueOf(konum.getProvider()) + ";" + String.valueOf(konum.getTime());
-            buf = new BufferedWriter(fw);
-            buf.write(konumText);
-            buf.newLine();
-            return 1;
-        } catch (IOException e) {
-            //Crashlytics.logException(e);
-            return 0;
-        } finally {
-            try {
-                buf.close();
-                fw.close();
-            } catch (IOException e) {
-                konumFile.delete();
-            }
-        }
-    }
-
-    public static Location MevcutKonumuGetir() {
-
-        File konumFile = null;
-        RandomAccessFile fileHandler = null;
-        try {
-            konumFile = new File(Environment.getExternalStorageDirectory() + "/iztop/konum.loc");
-
-            fileHandler = new RandomAccessFile(Environment.getExternalStorageDirectory() + "/iztop/konum.loc", "r");
-            if (fileHandler == null) {
-                return null;
-            }
-
-            FileDescriptor fh = fileHandler.getFD();
-            if (!fh.valid()) {
-                return null;
-            }
-
-            String locText = fileHandler.readLine();
-            // �rnek: 65.96669666666666;-18.5333;1.0;gps;1384976198000
-            if (locText.trim().equals("")) {
-                return null;
-            }
-            String[] locationElems = locText.split(";");
-            Location newLocation = new Location(locationElems[3]);
-            newLocation.setLatitude(Double.parseDouble(locationElems[0]));
-            newLocation.setLongitude(Double.parseDouble(locationElems[1]));
-            newLocation.setProvider(locationElems[3]);
-            newLocation.setAccuracy(Float.parseFloat(locationElems[2]));
-            newLocation.setTime(Long.parseLong(locationElems[4]));
-
-            return newLocation;
-        } catch (java.io.FileNotFoundException e) {
-            //Crashlytics.logException(e);
-            return null;
-        } catch (IOException e) {
-            // Crashlytics.logException(e);
-            return null;
-        } finally {
-            if (fileHandler != null)
-                try {
-                    fileHandler.close();
-
-                } catch (IOException e) {
-                    konumFile.delete();
-
-                }
-        }
-    }
-
     @DebugLog
     public static boolean validateTCKN(String TCKN) {
         try {
-
-            // TCKN'nin her hanesi rakamsal de�er i�erir.
             Float.parseFloat(TCKN);
-            // TCKN 11 hanelidir.
             if (TCKN.length() != 11) {
                 return false;
             }
-            // TCKN 0 ile ba�layamaz
             if (TCKN.substring(0, 1).equals("0")) {
                 return false;
             }
@@ -300,23 +185,18 @@ public class SuperHelper {
             int n10 = Integer.parseInt(TCKN.substring(9, 10));
             int n11 = Integer.parseInt(TCKN.substring(10, 11));
 
-            // 1. 3. 5. 7. ve 9. hanelerin toplam�n�n 7 kat�ndan, 2. 4. 6. ve 8.
-            // hanelerin toplam� ��kart�ld���nda, elde edilen sonucun 10'a
-            // b�l�m�nden kalan, yani Mod10'u bize 10. haneyi verir.
             if ((((n1 + n3 + n5 + n7 + n9) * 7) - (n2 + n4 + n6 + n8)) % 10 != n10) {
                 return false;
             }
-            // 1. 2. 3. 4. 5. 6. 7. 8. 9. ve 10. hanelerin toplam�ndan elde
-            // edilen sonucun 10'a b�l�m�nden kalan, yani Mod10'u bize 11.
-            // haneyi verir.
+
             return (n1 + n2 + n3 + n4 + n5 + n6 + n7 + n8 + n9 + n10) % 10 == n11;
 
         } catch (Exception ex) {
-            //Crashlytics.logException(ex);
+            ex.printStackTrace();
             return false;
         }
     }
-
+    /*
     @DebugLog
     public static void startWakeLock(Context context, int flags, String tag) {
         PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
@@ -330,6 +210,7 @@ public class SuperHelper {
         PowerManager.WakeLock wl = pm.newWakeLock(flags, tag);
         wl.release();
     }
+    */
 
     /**
      * <h1>ReplaceFragmentBeginTransaction</h1>
@@ -348,8 +229,8 @@ public class SuperHelper {
         if (isBackStack) {
             fragmentTransaction.addToBackStack(null);
         }
-        //fragmentTransaction.commitAllowingStateLoss();
-        fragmentTransaction.replace(containerID, fragment, tag).commit();
+        fragmentTransaction.replace(containerID, fragment, tag);
+        fragmentTransaction.commitAllowingStateLoss();
     }
 
     /**
@@ -376,7 +257,8 @@ public class SuperHelper {
             }
         }
         //fragmentTransaction.commitAllowingStateLoss();
-        fragmentTransaction.replace(containerID, fragment, tag).commit();
+        fragmentTransaction.replace(containerID, fragment, tag);
+        fragmentTransaction.commitAllowingStateLoss();
     }
 
     @DebugLog
@@ -403,12 +285,16 @@ public class SuperHelper {
         //editText.setBackgroundColor(Color.TRANSPARENT);
     }
 
+    /*
     @DebugLog
     public static void ShowDatePickerViewClick(final EditText editText, final AppCompatActivity activity) {
+
+
         editText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-             /*
+
+
                 CalendarDatePickerDialogFragment cdp = new CalendarDatePickerDialogFragment()
                         .setThemeCustom(R.style.MyCustomBetterPickerTheme)
                         .setOnDateSetListener(new CalendarDatePickerDialogFragment.OnDateSetListener() {
@@ -422,10 +308,12 @@ public class SuperHelper {
                                 //.setDateRange(minDate, null)
                         .setThemeDark(true);
                 cdp.show(activity.getSupportFragmentManager(), "DPD");
-                */
+
+
             }
         });
     }
+    */
 
     @DebugLog
     public static Bitmap drawableToBitmap(Drawable drawable) {
@@ -492,42 +380,6 @@ public class SuperHelper {
         }
         Crashlytics.log(Log.INFO, tag, log);
         */
-    }
-
-    @DebugLog
-    public static boolean FirstTimeControl() {
-        /*
-        ModelIztopPreference mip = DbManager.getModelIztopPreference();
-
-        if (mip == null) {
-            return true;
-        } else {
-            return mip.isFirstTimeControl();
-        }
-        */
-        return false;
-    }
-
-    @DebugLog
-    public static void ReaktifReset(Context context) {
-/*
-        DbManager.dbDeletePersonel();
-        DbManager.dbDeleteGonderi();
-        DbManager.dbDeleteAppProcessPermissions();
-        DbManager.dbDeleteAppDsParams();
-        DbManager.dbDeleteModelAppParams();
-        DbManager.dbDeleteAppWhiteList();
-        DbManager.dbDeleteIslemSonuclari();
-        DbManager.dbDeleteBelge();
-        DbManager.dbDeleteModelIztopPreference();
-        DbManager.dbDeleteChannels();
-
-        PrefsHelper.clearPreference(context);
-
-        File internalFile = new File(context.getFilesDir().getPath() + "/iztop");
-        DeleteRecursive(internalFile);
-        //stopService(ForegroundService_.intent(this).get());
-*/
     }
 
 

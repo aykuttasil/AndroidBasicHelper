@@ -104,7 +104,7 @@ public class InternetConnectionHelper {
     @DebugLog
     public static boolean isInternetAvailable() {
         try {
-            InetAddress ipAddr = InetAddress.getByName("reaktiftest.aktif.com"); //You can replace it with your name
+            InetAddress ipAddr = InetAddress.getByName("www.google.com"); //You can replace it with your name
 
             if (ipAddr.equals("")) {
                 return false;
