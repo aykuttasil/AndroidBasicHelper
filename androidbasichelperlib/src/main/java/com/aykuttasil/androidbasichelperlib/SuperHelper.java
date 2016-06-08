@@ -196,21 +196,6 @@ public class SuperHelper {
             return false;
         }
     }
-    /*
-    @DebugLog
-    public static void startWakeLock(Context context, int flags, String tag) {
-        PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
-        PowerManager.WakeLock wl = pm.newWakeLock(flags, tag);
-        wl.acquire();
-    }
-
-    @DebugLog
-    public static void stopWakeLock(Context context, int flags, String tag) {
-        PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
-        PowerManager.WakeLock wl = pm.newWakeLock(flags, tag);
-        wl.release();
-    }
-    */
 
     /**
      * <h1>ReplaceFragmentBeginTransaction</h1>
@@ -328,60 +313,6 @@ public class SuperHelper {
 
         return bitmap;
     }
-
-   /* @DebugLog
-    public static void subscribeTopics(Context context, String token, List<ModelSubscribeChannel> TOPICS) {
-        try {
-            GcmPubSub pubSub = GcmPubSub.getInstance(context);
-            for (ModelSubscribeChannel topic : TOPICS) {
-                pubSub.subscribe(token, "/topics/" + topic.getChannelName(), null);
-                Log.i(TAG, "GcmPubSub: " + "/topics/" + topic.getChannelName());
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-            CrashlyticsLog(e);
-        }
-
-
-    }*/
-
-    @DebugLog
-    public static void CrashlyticsLog(Throwable e) {
-        /*
-        ModelPersonel modelPersonel = DbManager.getPersonel();
-        if (modelPersonel != null) {
-            Crashlytics.setUserIdentifier(modelPersonel.getPkodu());
-            Crashlytics.setUserName(modelPersonel.getPersonelAd() + " " + modelPersonel.getPersonelSoyad());
-        }
-
-        Crashlytics.logException(e);
-        */
-    }
-
-    @DebugLog
-    public static void CrashlyticsLogError(String tag, String log) {
-        /*
-        ModelPersonel modelPersonel = DbManager.getPersonel();
-        if (modelPersonel != null) {
-            Crashlytics.setUserIdentifier(modelPersonel.getPkodu());
-            Crashlytics.setUserName(modelPersonel.getPersonelAd() + " " + modelPersonel.getPersonelSoyad());
-        }
-        Crashlytics.log(Log.ERROR, tag, log);
-        */
-    }
-
-    @DebugLog
-    public static void CrashlyticsLogInfo(String tag, String log) {
-        /*
-        ModelPersonel modelPersonel = DbManager.getPersonel();
-        if (modelPersonel != null) {
-            Crashlytics.setUserIdentifier(modelPersonel.getPkodu());
-            Crashlytics.setUserName(modelPersonel.getPersonelAd() + " " + modelPersonel.getPersonelSoyad());
-        }
-        Crashlytics.log(Log.INFO, tag, log);
-        */
-    }
-
 
     @DebugLog
     public static void DeleteRecursive(File fileOrDirectory) {
