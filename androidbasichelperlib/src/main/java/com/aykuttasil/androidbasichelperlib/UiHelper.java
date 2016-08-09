@@ -52,7 +52,8 @@ public class UiHelper {
         }
 
         public MaterialDialog getIndeterminateDialog(String title, String content) {
-            return mBuilder.title(title)
+            return mBuilder
+                    .title(title)
                     .content(content)
                     .progress(true, 100, false)
                     .progressIndeterminateStyle(true)
@@ -62,7 +63,8 @@ public class UiHelper {
         }
 
         public MaterialDialog getOKDialog(String title, String content, Drawable icon) {
-            return mBuilder.title(title)
+            return mBuilder
+                    .title(title)
                     .content(content)
                     .cancelable(false)
                     .icon(icon == null ? new IconDrawable(mContext, FontAwesomeIcons.fa_angle_right).actionBarSize().colorRes(R.color.accent) : icon)
@@ -77,7 +79,8 @@ public class UiHelper {
         }
 
         public MaterialDialog getOKCancelDialog(String title, String content, Drawable icon) {
-            return mBuilder.title(title)
+            return mBuilder
+                    .title(title)
                     .content(content)
                     .cancelable(false)
                     .icon(icon == null ? new IconDrawable(mContext, FontAwesomeIcons.fa_angle_right).actionBarSize().colorRes(R.color.accent) : icon)
@@ -96,6 +99,16 @@ public class UiHelper {
                     .negativeText("İptal Et")
                     .positiveText("Devam Et")
                     .positiveColor(Color.RED)
+                    .build();
+        }
+
+        public MaterialDialog getProgressDialog(String title, String content, Drawable icon) {
+            return mBuilder
+                    .title(title)
+                    .content(content)
+                    .cancelable(false)
+                    .icon(icon == null ? new IconDrawable(mContext, FontAwesomeIcons.fa_angle_right).actionBarSize().colorRes(R.color.accent) : icon)
+                    .progress(true, 0)
                     .build();
         }
     }

@@ -718,5 +718,19 @@ public class SuperHelper {
         return randomUrl;
     }
 
+    public static boolean validateIsEmpty(EditText... editTexts) {
+
+        boolean flag = false;
+        for (EditText editText : editTexts) {
+            if (editText.getText().toString().length() == 0) {
+                editText.setError("Boş bırakmayınız !");
+                flag = true;
+            } else {
+                editText.setError(null);
+            }
+        }
+        return flag;
+    }
+
 
 }
