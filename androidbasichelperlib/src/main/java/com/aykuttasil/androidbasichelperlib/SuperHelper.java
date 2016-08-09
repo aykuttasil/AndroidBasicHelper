@@ -38,7 +38,10 @@ import android.util.Patterns;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.signature.StringSignature;
 import com.codetroopers.betterpickers.calendardatepicker.CalendarDatePickerDialogFragment;
 
 import org.json.JSONArray;
@@ -55,6 +58,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Random;
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 
@@ -702,6 +706,16 @@ public class SuperHelper {
                 SystemClock.elapsedRealtime(),
                 periodicTime,
                 pendingIntent);
+    }
+
+    public static String setRandomImage(Context context, ImageView imageView) {
+        String randomUrl = "http://lorempixel.com/400/200";
+        Glide.with(context)
+                .load(randomUrl)
+                .signature(new StringSignature(UUID.randomUUID().toString()))
+                .fitCenter()
+                .into(imageView);
+        return randomUrl;
     }
 
 
