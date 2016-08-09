@@ -19,9 +19,6 @@ import com.joanzapata.iconify.Iconify;
 import com.joanzapata.iconify.fonts.FontAwesomeIcons;
 import com.joanzapata.iconify.fonts.FontAwesomeModule;
 
-import hugo.weaving.DebugLog;
-
-
 public class UiHelper {
 
     public static class UiDialog {
@@ -107,27 +104,22 @@ public class UiHelper {
         static Context mContext;
         Snackbar snackbar;
 
-        @DebugLog
         private UiSnackBar(View view, String text, int duration) {
             snackbar = Snackbar.make(view, text, duration);
         }
 
-
-        @DebugLog
         public static Snackbar newInstance(View view, String text, int duration) {
 
             return new UiSnackBar(view, text, duration).snackbar;
 
         }
 
-        @DebugLog
         public static UiSnackBar newInstance(Context context, View view) {
             mContext = context;
             return new UiSnackBar(view, null, Snackbar.LENGTH_LONG);
 
         }
 
-        @DebugLog
         public static void showSimpleSnackBar(View view, String text, int duration) {
             Snackbar snackbar = Snackbar.make(view, text, duration);
             TextView textView = (TextView) snackbar.getView().findViewById(R.id.snackbar_text);
@@ -137,7 +129,6 @@ public class UiHelper {
 
         }
 
-        @DebugLog
         private static ViewGroup findSuitableParent(View view) {
             ViewGroup fallback = null;
             do {
@@ -166,43 +157,36 @@ public class UiHelper {
             return fallback;
         }
 
-        @DebugLog
         public UiSnackBar setText(String text) {
             snackbar.setText(text);
             return this;
         }
 
-        @DebugLog
         public UiSnackBar setDuration(int duration) {
             snackbar.setDuration(duration);
             return this;
         }
 
-        @DebugLog
         public UiSnackBar setBackgroundColor(int color) {
             snackbar.getView().setBackgroundColor(color);
             return this;
         }
 
-        @DebugLog
         public UiSnackBar setActionTextColor(int color) {
             snackbar.setActionTextColor(color);
             return this;
         }
 
-        @DebugLog
         public UiSnackBar setMessageTextColor(int color) {
             TextView textView = (TextView) snackbar.getView().findViewById(R.id.snackbar_text);
             textView.setTextColor(color);
             return this;
         }
 
-        @DebugLog
         public Snackbar getSnackbar() {
             return snackbar;
         }
 
-        @DebugLog
         public void show() {
             snackbar.show();
         }

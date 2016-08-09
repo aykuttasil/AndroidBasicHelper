@@ -8,7 +8,6 @@ import android.widget.Toast;
 
 import java.net.InetAddress;
 
-import hugo.weaving.DebugLog;
 
 
 /**
@@ -16,7 +15,6 @@ import hugo.weaving.DebugLog;
  */
 public class InternetConnectionHelper {
 
-    @DebugLog
     public static boolean checkConnection1(Context context) {
         final ConnectivityManager connMgr = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
 
@@ -36,14 +34,12 @@ public class InternetConnectionHelper {
         return false;
     }
 
-    @DebugLog
     public static boolean checkConnection(Context con) {
         ConnectivityManager cm = (ConnectivityManager) con.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo netInfo = cm.getActiveNetworkInfo();
         return netInfo != null && netInfo.isConnectedOrConnecting();
     }
 
-    @DebugLog
     public static Boolean getWifiIsConnected(Context mContext) {
         ConnectivityManager connManager = (ConnectivityManager) mContext.getSystemService(mContext.CONNECTIVITY_SERVICE);
         NetworkInfo mWifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
@@ -55,7 +51,6 @@ public class InternetConnectionHelper {
         }
     }
 
-    @DebugLog
     public static Boolean get3GIsConnected(Context mContext) {
         ConnectivityManager connManager = (ConnectivityManager) mContext.getSystemService(mContext.CONNECTIVITY_SERVICE);
         NetworkInfo m3g = connManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
@@ -67,7 +62,6 @@ public class InternetConnectionHelper {
         }
     }
 
-    @DebugLog
     public static String get3gStatus(Context context) {
 
         TelephonyManager telephonymanager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
@@ -100,8 +94,6 @@ public class InternetConnectionHelper {
         return cTypeString;
     }
 
-
-    @DebugLog
     public static boolean isInternetAvailable() {
         try {
             InetAddress ipAddr = InetAddress.getByName("www.google.com"); //You can replace it with your name

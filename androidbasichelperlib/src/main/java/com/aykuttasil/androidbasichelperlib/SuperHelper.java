@@ -6,6 +6,8 @@ import android.accounts.AccountManager;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.ActivityManager;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.bluetooth.BluetoothAdapter;
 import android.content.ComponentName;
 import android.content.Context;
@@ -14,19 +16,16 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.location.Location;
 import android.net.Uri;
 import android.os.Build;
-import android.os.Bundle;
 import android.os.Environment;
 import android.os.PowerManager;
 import android.os.StatFs;
-import android.provider.CallLog;
+import android.os.SystemClock;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -46,13 +45,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileDescriptor;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.RandomAccessFile;
-import java.lang.reflect.Modifier;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
@@ -65,13 +58,10 @@ import java.util.Random;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 
-import hugo.weaving.DebugLog;
-
 public class SuperHelper {
 
     private static final String TAG = SuperHelper.class.getSimpleName();
 
-    @DebugLog
     public static String getSimState(Context context) {
         TelephonyManager telephonymanager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
         int state = telephonymanager.getSimState();
@@ -94,7 +84,6 @@ public class SuperHelper {
         }
     }
 
-    @DebugLog
     public static String getBluetoothState(Context context) {
         BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         if (mBluetoothAdapter == null) {
@@ -110,7 +99,6 @@ public class SuperHelper {
 
     }
 
-    @DebugLog
     public static JSONArray getInstalledApps(Context mContext) {
 
         ArrayList<PackageInfo> res = new ArrayList<PackageInfo>();
@@ -159,42 +147,36 @@ public class SuperHelper {
 
     }
 
-    @DebugLog
     public static float getAvailableInternalMemorySize() {
         StatFs stat = new StatFs(Environment.getDataDirectory().getPath());
         long bytesAvailable = (long) stat.getBlockSize() * (long) stat.getAvailableBlocks();
         return bytesAvailable / (1024.f * 1024.f);
     }
 
-    @DebugLog
     public static float getTotalInternalMemorySize() {
         StatFs stat = new StatFs(Environment.getDataDirectory().getPath());
         long bytesAvailable = (long) stat.getBlockSize() * (long) stat.getBlockCount();
         return bytesAvailable / (1024.f * 1024.f);
     }
 
-    @DebugLog
     public static float getAvailableSDStorage() {
         StatFs stat = new StatFs(Environment.getExternalStorageDirectory().getPath());
         long bytesAvailable = (long) stat.getBlockSize() * (long) stat.getAvailableBlocks();
         return bytesAvailable / (1024.f * 1024.f);
     }
 
-    @DebugLog
     public static float getSDStorage() {
         StatFs stat = new StatFs(Environment.getExternalStorageDirectory().getPath());
         long bytesAvailable = (long) stat.getBlockSize() * (long) stat.getBlockCount();
         return bytesAvailable / (1024.f * 1024.f);
     }
 
-    @DebugLog
     public static long getLocalTime() {
         //DateFormat.getDateInstance().format(System.currentTimeMillis());
         return new Date(System.currentTimeMillis()).getTime();
 
     }
 
-    @DebugLog
     public static boolean isDeviceRooted() {
 
         // get from build info
@@ -216,7 +198,6 @@ public class SuperHelper {
         return false;
     }
 
-    @DebugLog
     public static String getAccountName(Context mContext) {
         Pattern emailPattern = Patterns.EMAIL_ADDRESS; // API level 8+
         Account[] accounts = AccountManager.get(mContext).getAccounts();
@@ -232,7 +213,6 @@ public class SuperHelper {
         return returnEmail;
     }
 
-    @DebugLog
     public static String generateRandom(int length) {
         Random random = new Random();
         char[] digits = new char[length];
@@ -243,7 +223,6 @@ public class SuperHelper {
         return new String(digits);
     }
 
-    @DebugLog
     @TargetApi(Build.VERSION_CODES.GINGERBREAD)
     public static long getElapsedDays(Date date1, Date date2) {
         long duration = date1.getTime() - date2.getTime();
@@ -253,7 +232,6 @@ public class SuperHelper {
 
     }
 
-    @DebugLog
     public static boolean deleteDirectoryContent(File path) {
         try {
             if (path.exists()) {
@@ -272,30 +250,25 @@ public class SuperHelper {
 
     }
 
-    @DebugLog
     public static String getDeviceId(Context context) {
         TelephonyManager telephonymanager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
         return telephonymanager.getDeviceId();
     }
 
-    @DebugLog
     public static String getSimSerialNumber(Context context) {
         TelephonyManager telephonymanager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
         return telephonymanager.getSimSerialNumber();
     }
 
-    @DebugLog
     public static String getOperetorName(Context context) {
         TelephonyManager telephonymanager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
         return telephonymanager.getNetworkOperatorName();
     }
 
-    @DebugLog
     public static String getDeviceLanguage(Context context) {
         return context.getResources().getConfiguration().locale.getDisplayName();
     }
 
-    @DebugLog
     public static String getDeviceName() {
         String manufacturer = Build.MANUFACTURER;
         String model = Build.MODEL;
@@ -309,7 +282,6 @@ public class SuperHelper {
         return capitalize(manufacturer) + " " + model;
     }
 
-    @DebugLog
     private static String capitalize(String str) {
         if (TextUtils.isEmpty(str)) {
             return str;
@@ -336,7 +308,6 @@ public class SuperHelper {
      * @param context
      * @return
      */
-    @DebugLog
     public static boolean isAppIsInBackground(Context context) {
         boolean isInBackground = true;
         ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
@@ -362,13 +333,11 @@ public class SuperHelper {
         return isInBackground;
     }
 
-    @DebugLog
     public static String getDeviceDate() {
         SimpleDateFormat sdfDateTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
         return sdfDateTime.format(new Date(System.currentTimeMillis()));
     }
 
-    @DebugLog
     public static boolean VerifyTCKN(String TCKN) {
         try {
 
@@ -412,7 +381,6 @@ public class SuperHelper {
         }
     }
 
-    @DebugLog
     public static void startWakeLock(Context context, int flags, String tag) {
         PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
         PowerManager.WakeLock wl = pm.newWakeLock(flags, tag);
@@ -430,7 +398,6 @@ public class SuperHelper {
      * @param tag
      * @param isBackStack
      */
-    @DebugLog
     public static void ReplaceFragmentBeginTransaction(AppCompatActivity activity, Fragment fragment, int containerID, String tag, boolean isBackStack) {
         FragmentTransaction fragmentTransaction = activity.getSupportFragmentManager().beginTransaction();
         if (isBackStack) {
@@ -453,7 +420,6 @@ public class SuperHelper {
      * @param isBackStack
      * @param popStackName
      */
-    @DebugLog
     public static void ReplaceFragmentBeginTransaction(Fragment container, Fragment fragment, int containerID, String tag, boolean isBackStack, String popStackName) {
         FragmentTransaction fragmentTransaction = container.getChildFragmentManager().beginTransaction();
         fragmentTransaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
@@ -469,13 +435,11 @@ public class SuperHelper {
         fragmentTransaction.commitAllowingStateLoss();
     }
 
-    @DebugLog
     public static void hideSoftKeyboard(Context context, View view) {
         InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
-    @DebugLog
     public static void showSoftKeyboard(Context context, View view) {
         if (view.requestFocus()) {
             InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -483,7 +447,6 @@ public class SuperHelper {
         }
     }
 
-    @DebugLog
     public static void disableEditText(EditText editText) {
         editText.setFocusable(false);
         editText.setEnabled(false);
@@ -493,7 +456,6 @@ public class SuperHelper {
         //editText.setBackgroundColor(Color.TRANSPARENT);
     }
 
-    @DebugLog
     public static void ShowDatePickerViewClick(final EditText editText, final AppCompatActivity activity) {
         editText.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -515,7 +477,6 @@ public class SuperHelper {
         });
     }
 
-    @DebugLog
     public static Bitmap drawableToBitmap(Drawable drawable) {
         if (drawable instanceof BitmapDrawable) {
             return ((BitmapDrawable) drawable).getBitmap();
@@ -529,7 +490,6 @@ public class SuperHelper {
         return bitmap;
     }
 
-    @DebugLog
     public static void DeleteRecursive(File fileOrDirectory) {
 
         if (fileOrDirectory.isDirectory())
@@ -540,14 +500,12 @@ public class SuperHelper {
 
     }
 
-    @DebugLog
     public static String getFormatTime() {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
         Date date = new Date();
         return simpleDateFormat.format(date);
     }
 
-    @DebugLog
     public static String getFormatTime(long time) {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
         Date date = new Date();
@@ -555,7 +513,6 @@ public class SuperHelper {
         return simpleDateFormat.format(date);
     }
 
-    @DebugLog
     public static String getFormatTimeMinute(long time) {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm:ss", Locale.US);
         Date date = new Date();
@@ -563,7 +520,6 @@ public class SuperHelper {
         return simpleDateFormat.format(date);
     }
 
-    @DebugLog
     public static String getFormatTimeHourMinute(long time) {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm", Locale.US);
         Date date = new Date();
@@ -571,7 +527,6 @@ public class SuperHelper {
         return simpleDateFormat.format(date);
     }
 
-    @DebugLog
     public static String getFormatTimeDate(long time) {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
         Date date = new Date();
@@ -579,7 +534,6 @@ public class SuperHelper {
         return simpleDateFormat.format(date);
     }
 
-    @DebugLog
     public static void PhoneCall(Activity activity, String phoneNumber) {
         Intent callIntent = new Intent(Intent.ACTION_CALL);
         callIntent.setData(Uri.parse("tel:" + phoneNumber));
@@ -639,7 +593,6 @@ public class SuperHelper {
     }
     */
 
-    @DebugLog
     public static boolean isServiceRunning(Activity activity, String serviceName) {
         ActivityManager manager = (ActivityManager) activity.getSystemService(Context.ACTIVITY_SERVICE);
         for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
@@ -656,7 +609,6 @@ public class SuperHelper {
     }
     */
 
-    @DebugLog
     public static String getStandartText(String text) {
 
         if (text == null) {
@@ -665,7 +617,6 @@ public class SuperHelper {
         return text.toLowerCase().replace("ü", "u").replace("ö", "o").replace("ı", "i").replace("ğ", "g").replace("ç", "c").replace("ş", "s");
     }
 
-    @DebugLog
     public static String getCorrectPhoneNumber(String telNo) {
         String correctTel;
 
@@ -686,7 +637,6 @@ public class SuperHelper {
         return correctTel;
     }
 
-    @DebugLog
     public void printHashKey(Context context, String packageName) {
         try {
             PackageInfo info = context.getPackageManager().getPackageInfo(
@@ -703,5 +653,56 @@ public class SuperHelper {
             Log.d("KeyHash:", e.toString());
         }
     }
+
+    public static boolean checkPermission(Context context, String permission) {
+        return ActivityCompat.checkSelfPermission(context, permission) == PackageManager.PERMISSION_GRANTED;
+    }
+
+    public static boolean checkPermissions(Context context, String[] permissions) {
+        if (Build.VERSION.SDK_INT >= 23) {
+            for (String permission : permissions) {
+                if (ActivityCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    private void setAlarmRepeating(Context context, long periodicTime, Class receiverClass, int requestCode) {
+
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+
+        Intent intent = new Intent(context.getApplicationContext(), receiverClass);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context,
+                requestCode,
+                intent,
+                PendingIntent.FLAG_UPDATE_CURRENT);
+
+
+        // setInexactRepeating() kullanıldığında sabit aralıklar verilmek zorundadır. Uygulamalar genelde bu şekilde periodic
+        // servislerini çalıştırır. Android, düzenlenmiş diğer işlemlerle aynı anda periodic servisi çalıştıracağından
+        // pil ömrü uzar.
+        // -----
+        // Eğer kendimiz zaman belirlemek istiyorsak (her 10 saniyede bir çalıştır gibi) setRepeating() kullanmamamız gerekir.
+        // -----
+        // Alarmı hemen çalıştırmaya başla ve her 15 dakikada bir tekrarla.
+        /*alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
+                SystemClock.currentThreadTimeMillis(),
+                AlarmManager.INTERVAL_FIFTEEN_MINUTES,
+                pendingIntent);*/
+
+        //alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP);
+
+
+        // AlarmManager.ELAPSED_REALTIME -> ELAPSED_REALTIME system başlangıcını baz alır. Eğer gerçek saat ile ilgili bir işlem yapılmıcak
+        // ise bu parametre kullanılmalıdır.
+        // RTC -> Cihazın local saatini baz alır. Örneğin perşembe saat 4 de yapılcak bi iş belirlemek istersen RTC kullanmalıyız.
+        alarmManager.setRepeating(AlarmManager.ELAPSED_REALTIME,
+                SystemClock.elapsedRealtime(),
+                periodicTime,
+                pendingIntent);
+    }
+
 
 }
