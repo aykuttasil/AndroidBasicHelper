@@ -307,12 +307,6 @@ public class SuperHelper {
         return phrase;
     }
 
-    /**
-     * Method checks if the app is in background or not
-     *
-     * @param context
-     * @return
-     */
     public static boolean isAppIsInBackground(Context context) {
         boolean isInBackground = true;
         ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
@@ -392,7 +386,6 @@ public class SuperHelper {
         wl.acquire();
     }
 
-
     public static void ReplaceFragmentBeginTransaction(AppCompatActivity activity, Fragment fragment, int containerID, boolean isBackStack) {
 
         /*
@@ -452,17 +445,6 @@ public class SuperHelper {
         }
     }
 
-    /**
-     * <h1>ReplaceFragmentBeginTransaction</h1>
-     * <p>Activity içerisinde iken ve bu Activity içerisinde bulunan FragmentContainer a bir Fragment atama
-     * yapılacak iken bu fonksiyon çağırılır.</p>
-     *
-     * @param activity
-     * @param fragment
-     * @param containerID
-     * @param tag
-     * @param isBackStack
-     */
     public static void ReplaceFragmentBeginTransaction(AppCompatActivity activity, Fragment fragment, int containerID, String tag, boolean isBackStack) {
         FragmentTransaction fragmentTransaction = activity.getSupportFragmentManager().beginTransaction();
         if (isBackStack) {
@@ -473,18 +455,6 @@ public class SuperHelper {
         fragmentTransaction.commitAllowingStateLoss();
     }
 
-    /**
-     * <h1>ReplaceFragmentBeginTransaction</h1>
-     * <p>Fragment içerisinde iken ve bu Fragment içerisinde bulunan FragmentContainer a başka bir Fragment a atama
-     * yapılacak iken bu fonksiyon çağırılır.</p>
-     *
-     * @param container
-     * @param fragment
-     * @param containerID
-     * @param tag
-     * @param isBackStack
-     * @param popStackName
-     */
     public static void ReplaceFragmentBeginTransaction(Fragment container, Fragment fragment, int containerID, String tag, boolean isBackStack, String popStackName) {
         FragmentTransaction fragmentTransaction = container.getChildFragmentManager().beginTransaction();
         fragmentTransaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
