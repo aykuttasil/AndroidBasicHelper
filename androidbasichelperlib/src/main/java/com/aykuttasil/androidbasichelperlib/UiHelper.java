@@ -111,6 +111,15 @@ public class UiHelper {
                     .progress(true, 0)
                     .build();
         }
+
+        public MaterialDialog getProgressDialog(String content, Drawable icon) {
+            return mBuilder
+                    .content(content)
+                    .cancelable(false)
+                    .icon(icon == null ? new IconDrawable(mContext, FontAwesomeIcons.fa_angle_right).actionBarSize().colorRes(R.color.accent) : icon)
+                    .progress(true, 0)
+                    .build();
+        }
     }
 
     public static class UiSnackBar {

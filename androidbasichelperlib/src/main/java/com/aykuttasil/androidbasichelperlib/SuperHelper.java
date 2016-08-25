@@ -28,6 +28,7 @@ import android.os.StatFs;
 import android.os.SystemClock;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.telephony.TelephonyManager;
@@ -391,6 +392,66 @@ public class SuperHelper {
         wl.acquire();
     }
 
+
+    public static void ReplaceFragmentBeginTransaction(AppCompatActivity activity, Fragment fragment, int containerID, boolean isBackStack) {
+
+        /*
+        FragmentManager akışını loglamak istiyorsan comment satırını aktifleştir.
+         */
+        //FragmentManager.enableDebugLogging(true);
+        FragmentManager fragmentManager = activity.getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+
+        /*
+        Eğer daha önce yüklenen bir fragment tekrar yüklenmeye çalışılıyor ise replace yapmak yerine popstack ile yükleme yapıyoruz.
+         */
+        Fragment alreadyFragment = fragmentManager.findFragmentByTag(fragment.getClass().getSimpleName());
+
+        if (alreadyFragment == null) {
+            if (isBackStack) {
+                fragmentTransaction.addToBackStack(fragment.getClass().getSimpleName());
+            }
+            fragmentTransaction.replace(containerID, fragment, fragment.getClass().getSimpleName());
+            fragmentTransaction.commit();
+        } else {
+
+            /*
+            for (Fragment frg : fragmentManager.getFragments()) {
+                if (frg != null) {
+                }
+            }
+            */
+
+            if (!alreadyFragment.isVisible()) {
+
+                 /*
+                 * {@link fragmentManager.popBackStackImmediate()} kullanarak popstack olup olmadığını yakalayabiliriz.
+                 * Eğer fragment, uygulama ilk açıldığında yüklenen fragment ise popstack false olarak commit edileceği için
+                 * popBackStackImmadiate = false döner.
+                 * Bunun kontorülü yapıyoruz ve ilk yüklenen fragment herhangi bir butona basılarak tekrar yüklenmeye çalışılır ise
+                 * isBackStack değişken kontrolü yaparak replace ediyoruz.
+                 */
+                boolean isPopStack = fragmentManager.popBackStackImmediate(alreadyFragment.getClass().getSimpleName(), 0);
+                if (!isPopStack) {
+                    if (isBackStack) {
+                        fragmentTransaction.addToBackStack(fragment.getClass().getSimpleName());
+                    }
+                    fragmentTransaction.replace(containerID, fragment, fragment.getClass().getSimpleName());
+                    fragmentTransaction.commit();
+                }
+            }
+        }
+    }
+
+    public static void removeAllPopStack(AppCompatActivity activity) {
+
+        FragmentManager fm = activity.getSupportFragmentManager();
+        for (int i = 0; i < fm.getBackStackEntryCount(); ++i) {
+            fm.popBackStack();
+        }
+    }
+
     /**
      * <h1>ReplaceFragmentBeginTransaction</h1>
      * <p>Activity içerisinde iken ve bu Activity içerisinde bulunan FragmentContainer a bir Fragment atama
@@ -673,7 +734,7 @@ public class SuperHelper {
         return true;
     }
 
-    private void setAlarmRepeating(Context context, long periodicTime, Class receiverClass, int requestCode) {
+    public void setAlarmRepeating(Context context, long periodicTime, Class receiverClass, int requestCode) {
 
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 
@@ -708,6 +769,18 @@ public class SuperHelper {
                 pendingIntent);
     }
 
+    public void stopAlarmRepeating(Context context, Class receiverClass, int requestCode) {
+
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+
+        Intent intent = new Intent(context.getApplicationContext(), receiverClass);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context,
+                requestCode,
+                intent,
+                PendingIntent.FLAG_UPDATE_CURRENT);
+        alarmManager.cancel(pendingIntent);
+    }
+
     public static String setRandomImage(Context context, ImageView imageView) {
         String randomUrl = "http://lorempixel.com/400/200";
         Glide.with(context)
@@ -730,6 +803,38 @@ public class SuperHelper {
             }
         }
         return flag;
+    }
+
+    public static long getFolderSize(File f) {
+        long size = 0;
+        if (f.isDirectory()) {
+            for (File file : f.listFiles()) {
+                size += getFolderSize(file);
+            }
+        } else {
+            size = f.length();
+        }
+        return size;
+    }
+
+    public static String getFolderSizeString(File f) {
+        long size = 0;
+        if (f.isDirectory()) {
+            for (File file : f.listFiles()) {
+                size += getFolderSize(file);
+            }
+        } else {
+            size = f.length();
+        }
+
+        String value;
+        long Filesize = size / 1024;//call function and convert bytes into Kb
+        if (Filesize >= 1024)
+            value = Filesize / 1024 + " Mb";
+        else
+            value = Filesize + " Kb";
+
+        return value;
     }
 
 
