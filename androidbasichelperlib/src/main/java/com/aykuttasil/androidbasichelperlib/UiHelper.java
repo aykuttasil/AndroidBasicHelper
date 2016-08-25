@@ -58,7 +58,7 @@ public class UiHelper {
                     .progress(true, 100, false)
                     .progressIndeterminateStyle(true)
                     .cancelable(false)
-                    .icon(new IconDrawable(mContext, FontAwesomeIcons.fa_comment).actionBarSize().colorRes(R.color.accent))
+                    .icon(new IconDrawable(mContext, FontAwesomeIcons.fa_comment).actionBarSize().color(Color.GRAY))
                     .build();
         }
 
@@ -67,7 +67,7 @@ public class UiHelper {
                     .title(title)
                     .content(content)
                     .cancelable(false)
-                    .icon(icon == null ? new IconDrawable(mContext, FontAwesomeIcons.fa_angle_right).actionBarSize().colorRes(R.color.accent) : icon)
+                    .icon(icon == null ? new IconDrawable(mContext, FontAwesomeIcons.fa_angle_right).actionBarSize().color(Color.GRAY) : icon)
                     .onPositive(new MaterialDialog.SingleButtonCallback() {
                         @Override
                         public void onClick(MaterialDialog dialog, DialogAction which) {
@@ -98,6 +98,7 @@ public class UiHelper {
                     })
                     .negativeText("İptal Et")
                     .positiveText("Devam Et")
+                    .negativeColor(Color.GRAY)
                     .positiveColor(mContext.getResources().getColor(R.color.accent))
                     .build();
         }
@@ -107,7 +108,7 @@ public class UiHelper {
                     .title(title)
                     .content(content)
                     .cancelable(false)
-                    .icon(icon == null ? new IconDrawable(mContext, FontAwesomeIcons.fa_angle_right).actionBarSize().colorRes(R.color.accent) : icon)
+                    .icon(icon == null ? new IconDrawable(mContext, FontAwesomeIcons.fa_angle_right).actionBarSize().color(Color.GRAY) : icon)
                     .progress(true, 0)
                     .build();
         }
@@ -116,7 +117,7 @@ public class UiHelper {
             return mBuilder
                     .content(content)
                     .cancelable(false)
-                    .icon(icon == null ? new IconDrawable(mContext, FontAwesomeIcons.fa_angle_right).actionBarSize().colorRes(R.color.accent) : icon)
+                    .icon(icon == null ? new IconDrawable(mContext, FontAwesomeIcons.fa_angle_right).actionBarSize().color(Color.GRAY) : icon)
                     .progress(true, 0)
                     .build();
         }
