@@ -45,7 +45,7 @@ dependencies {
     compile 'com.android.support:design:24.2.0'
     compile 'com.afollestad.material-dialogs:core:0.8.6.1'
     compile 'com.afollestad.material-dialogs:commons:0.8.6.1'
-    compile 'com.joanzapata.iconify:android-iconify-fontawesome:2.1.1'
+    compile 'com.joanzapata.iconify:android-iconify-fontawesome:2.2.2'
     compile 'com.code-troopers.betterpickers:library:2.3.0'
     compile 'uk.co.chrisjenx:calligraphy:2.2.0'
     compile 'com.github.florent37:glidepalette:1.0.6'

@@ -83,7 +83,7 @@ public class UiHelper {
                     .title(title)
                     .content(content)
                     .cancelable(false)
-                    .icon(icon == null ? new IconDrawable(mContext, FontAwesomeIcons.fa_angle_right).actionBarSize().colorRes(R.color.accent) : icon)
+                    .icon(icon == null ? new IconDrawable(mContext, FontAwesomeIcons.fa_angle_right).actionBarSize().color(Color.GRAY) : icon)
                     .onPositive(new MaterialDialog.SingleButtonCallback() {
                         @Override
                         public void onClick(MaterialDialog dialog, DialogAction which) {
@@ -98,7 +98,7 @@ public class UiHelper {
                     })
                     .negativeText("İptal Et")
                     .positiveText("Devam Et")
-                    .positiveColor(Color.RED)
+                    .positiveColor(mContext.getResources().getColor(R.color.accent))
                     .build();
         }
 
