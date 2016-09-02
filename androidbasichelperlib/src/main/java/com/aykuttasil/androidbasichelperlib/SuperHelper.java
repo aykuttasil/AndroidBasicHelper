@@ -50,6 +50,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
@@ -578,56 +580,6 @@ public class SuperHelper {
         activity.startActivity(callIntent);
     }
 
-    /*
-    @DebugLog
-    public static PhoneCallStateRequest getCallDetails(Context context, String GonderiNo) {
-        PhoneCallStateRequest cr = new PhoneCallStateRequest();
-
-        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_CALL_LOG) != PackageManager.PERMISSION_GRANTED) {
-            return null;
-        }
-        Cursor cursor = context.getContentResolver().query(CallLog.Calls.CONTENT_URI,
-                null, null, null, CallLog.Calls.DATE + " DESC");
-
-        int number = cursor.getColumnIndex(CallLog.Calls.NUMBER);
-        int type = cursor.getColumnIndex(CallLog.Calls.TYPE);
-        int date = cursor.getColumnIndex(CallLog.Calls.DATE);
-        int duration = cursor.getColumnIndex(CallLog.Calls.DURATION);
-
-        cursor.moveToFirst();
-
-        ModelPersonel modelPersonel = DbManager.getPersonel();
-        cr.setPkodu(modelPersonel.getPkodu());
-        cr.setGonderiNo(GonderiNo);
-        cr.setTelNo(cursor.getString(number));
-        cr.setCallStatus(cursor.getInt(type));
-
-        String callDate = cursor.getString(date);
-        SimpleDateFormat sdfDateTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
-        Date callDayTime = new Date(Long.valueOf(callDate));
-
-        cr.setCallDate(sdfDateTime.format(callDayTime));
-        cr.setDuration(cursor.getInt(duration));
-
-        String dir = null;
-        int dircode = Integer.parseInt(cursor.getString(type));
-        switch (dircode) {
-            case CallLog.Calls.OUTGOING_TYPE:
-                cr.setCallStatusMsg("GİDEN");
-                break;
-            case CallLog.Calls.INCOMING_TYPE:
-                cr.setCallStatusMsg("GELEN");
-                break;
-            case CallLog.Calls.MISSED_TYPE:
-                cr.setCallStatusMsg("CEVAPSIZ");
-                break;
-        }
-
-        cursor.close();
-        return cr;
-    }
-    */
-
     public static boolean isServiceRunning(Activity activity, String serviceName) {
         ActivityManager manager = (ActivityManager) activity.getSystemService(Context.ACTIVITY_SERVICE);
         for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
@@ -637,12 +589,6 @@ public class SuperHelper {
         }
         return false;
     }
-
-    /*
-    public static List<ActivityManager.RunningServiceInfo> getRunningServices(int maxNum , Activity activity) {
-         ActivityManager.RunningServiceInfo lst =(ActivityManager.RunningServiceInfo) activity.getSystemService(Context.ACTIVITY_SERVICE);
-    }
-    */
 
     public static String getStandartText(String text) {
 
@@ -807,5 +753,97 @@ public class SuperHelper {
         return value;
     }
 
+    /**
+     * Bitmap.CompressFormat can be PNG,JPEG or WEBP.
+     * <p>
+     * quality goes from 1 to 100. (Percentage).
+     * <p>
+     * dir you can get from many places like Environment.getExternalStorageDirectory() or mContext.getFilesDir()
+     * depending on where you want to save the image.
+     */
+    public static boolean saveBitmapToFile(File dir, String fileName, Bitmap bm, Bitmap.CompressFormat format, int quality) {
 
+        File imageFile = new File(dir, fileName);
+
+        FileOutputStream fos = null;
+        try {
+            fos = new FileOutputStream(imageFile);
+
+            bm.compress(format, quality, fos);
+
+            fos.close();
+
+            return true;
+        } catch (IOException e) {
+            Log.e("app", e.getMessage());
+            if (fos != null) {
+                try {
+                    fos.close();
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
+            }
+        }
+        return false;
+    }
+
+
+
+
+
+    /*
+    public static List<ActivityManager.RunningServiceInfo> getRunningServices(int maxNum , Activity activity) {
+         ActivityManager.RunningServiceInfo lst =(ActivityManager.RunningServiceInfo) activity.getSystemService(Context.ACTIVITY_SERVICE);
+    }
+    */
+
+        /*
+    @DebugLog
+    public static PhoneCallStateRequest getCallDetails(Context context, String GonderiNo) {
+        PhoneCallStateRequest cr = new PhoneCallStateRequest();
+
+        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_CALL_LOG) != PackageManager.PERMISSION_GRANTED) {
+            return null;
+        }
+        Cursor cursor = context.getContentResolver().query(CallLog.Calls.CONTENT_URI,
+                null, null, null, CallLog.Calls.DATE + " DESC");
+
+        int number = cursor.getColumnIndex(CallLog.Calls.NUMBER);
+        int type = cursor.getColumnIndex(CallLog.Calls.TYPE);
+        int date = cursor.getColumnIndex(CallLog.Calls.DATE);
+        int duration = cursor.getColumnIndex(CallLog.Calls.DURATION);
+
+        cursor.moveToFirst();
+
+        ModelPersonel modelPersonel = DbManager.getPersonel();
+        cr.setPkodu(modelPersonel.getPkodu());
+        cr.setGonderiNo(GonderiNo);
+        cr.setTelNo(cursor.getString(number));
+        cr.setCallStatus(cursor.getInt(type));
+
+        String callDate = cursor.getString(date);
+        SimpleDateFormat sdfDateTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
+        Date callDayTime = new Date(Long.valueOf(callDate));
+
+        cr.setCallDate(sdfDateTime.format(callDayTime));
+        cr.setDuration(cursor.getInt(duration));
+
+        String dir = null;
+        int dircode = Integer.parseInt(cursor.getString(type));
+        switch (dircode) {
+            case CallLog.Calls.OUTGOING_TYPE:
+                cr.setCallStatusMsg("GİDEN");
+                break;
+            case CallLog.Calls.INCOMING_TYPE:
+                cr.setCallStatusMsg("GELEN");
+                break;
+            case CallLog.Calls.MISSED_TYPE:
+                cr.setCallStatusMsg("CEVAPSIZ");
+                break;
+        }
+
+        cursor.close();
+        return cr;
+    }
+    */
 }
