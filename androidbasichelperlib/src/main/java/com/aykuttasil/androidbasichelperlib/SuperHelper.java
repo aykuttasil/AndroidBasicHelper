@@ -595,7 +595,7 @@ public class SuperHelper {
         if (text == null) {
             return "";
         }
-        return text.toLowerCase().replace("ü", "u").replace("ö", "o").replace("ı", "i").replace("ğ", "g").replace("ç", "c").replace("ş", "s");
+        return text.toLowerCase(Locale.getDefault()).replace("ü", "u").replace("ö", "o").replace("ı", "i").replace("ğ", "g").replace("ç", "c").replace("ş", "s");
     }
 
     public static String getCorrectPhoneNumber(String telNo) {
@@ -755,9 +755,9 @@ public class SuperHelper {
 
     /**
      * Bitmap.CompressFormat can be PNG,JPEG or WEBP.
-     * <p>
+     * <p/>
      * quality goes from 1 to 100. (Percentage).
-     * <p>
+     * <p/>
      * dir you can get from many places like Environment.getExternalStorageDirectory() or mContext.getFilesDir()
      * depending on where you want to save the image.
      */
