@@ -43,6 +43,7 @@ dependencies {
     compile 'com.github.florent37:glidepalette:1.0.6'
     compile 'com.github.nisrulz:easydeviceinfo:2.2.0'
     compile 'com.github.nisrulz:easydeviceinfo-base:2.2.0'
+    compile 'com.blankj:utilcode:1.1.5'
 }
 
 ext {
