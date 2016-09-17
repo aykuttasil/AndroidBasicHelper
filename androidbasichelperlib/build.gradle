@@ -44,6 +44,7 @@ dependencies {
     compile 'com.github.nisrulz:easydeviceinfo:2.2.0'
     compile 'com.github.nisrulz:easydeviceinfo-base:2.2.0'
     compile 'com.blankj:utilcode:1.1.5'
+    //compile 'com.github.slmyldz:AndroidRandom:1.0' // Her türden random veriler üretilmesini sağlar
 }
 
 ext {
