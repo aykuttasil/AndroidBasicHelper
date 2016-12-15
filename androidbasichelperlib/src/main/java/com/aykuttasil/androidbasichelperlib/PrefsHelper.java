@@ -8,69 +8,102 @@ import android.support.annotation.Nullable;
 
 public class PrefsHelper {
 
-    private static final String DEFAULT_PREF_NAME = "new_iztop";
     private static final String DEFAULT_STRING_VALUE = null;
     private static final int DEFAULT_INT_VALUE = -100;
     private static final boolean DEFAULT_BOOLEAN_VALUE = false;
-    ////
+
     private Context mContext;
     private SharedPreferences mPref;
 
-    public PrefsHelper(Context context, String pref_name) {
+    private PrefsHelper(Context context) {
+        mContext = context;
+        mPref = PreferenceManager.getDefaultSharedPreferences(context);
+    }
+
+    private PrefsHelper(Context context, String pref_name) {
         mContext = context;
         mPref = context.getSharedPreferences(pref_name, Context.MODE_PRIVATE);
-        //mPref = new SecurePreferences(context, "pass_iztop", "iztop_prefs.xml");
-
     }
 
-    public static SharedPreferences getDefaultPreference(Context context) {
-        return PreferenceManager.getDefaultSharedPreferences(context);
-        //return new SecurePreferences(context);
+    public static PrefsHelper init(Context context) {
+        return new PrefsHelper(context);
     }
 
-    //
-    public static void writePrefString(Context context, String key, String value) {
-        new PrefsHelper(context, DEFAULT_PREF_NAME).getPrefEditor().putString(key, value).commit();
-    }
-
-    public static String readPrefString(Context context, String key) {
-        return new PrefsHelper(context, DEFAULT_PREF_NAME).getPreference().getString(key, DEFAULT_STRING_VALUE);
-    }
-
-    //
-    public static void writePrefInt(Context context, String key, int value) {
-        new PrefsHelper(context, DEFAULT_PREF_NAME).getPrefEditor().putInt(key, value).commit();
-    }
-
-    public static int readPrefInt(Context context, String key) {
-        return new PrefsHelper(context, DEFAULT_PREF_NAME).getPreference().getInt(key, DEFAULT_INT_VALUE);
-    }
-    //
-
-    //
-    public static void writePrefBool(Context context, String key, boolean value) {
-        new PrefsHelper(context, DEFAULT_PREF_NAME).getPrefEditor().putBoolean(key, value).commit();
-    }
-
-    public static boolean readPrefBool(Context context, String key) {
-        return new PrefsHelper(context, DEFAULT_PREF_NAME).getPreference().getBoolean(key, DEFAULT_BOOLEAN_VALUE);
-    }
-    //
-
-    public static void clearPreference(Context context) {
-        new PrefsHelper(context, DEFAULT_PREF_NAME).getPreference().edit().clear().commit();
-
+    public static PrefsHelper init(Context context, String name) {
+        return new PrefsHelper(context, name);
     }
 
     public SharedPreferences getPreference() {
         return mPref;
     }
-    //
 
     public SharedPreferences.Editor getPrefEditor() {
         return getPreference().edit();
     }
 
+    public void writeString(String key, String value) {
+        getPrefEditor().putString(key, value).commit();
+    }
+
+    public String readString(String key) {
+        return getPreference().getString(key, DEFAULT_STRING_VALUE);
+    }
+
+    public void writeInt(String key, int value) {
+        getPrefEditor().putInt(key, value).commit();
+    }
+
+    public int readInt(String key) {
+        return getPreference().getInt(key, DEFAULT_INT_VALUE);
+    }
+
+    public void writeBool(String key, boolean value) {
+        getPrefEditor().putBoolean(key, value).commit();
+    }
+
+    public boolean readBool(String key) {
+        return getPreference().getBoolean(key, DEFAULT_BOOLEAN_VALUE);
+    }
+
+    public void clearAllPreference() {
+        getPreference().edit().clear().apply();
+    }
+
+
+    //
+
+
+    public static SharedPreferences getDefaultPreference(Context context) {
+        return PreferenceManager.getDefaultSharedPreferences(context);
+    }
+
+    public static void writePrefString(Context context, String key, String value) {
+        init(context).getPrefEditor().putString(key, value).commit();
+    }
+
+    public static String readPrefString(Context context, String key) {
+        return init(context).getPreference().getString(key, DEFAULT_STRING_VALUE);
+    }
+
+    public static void writePrefInt(Context context, String key, int value) {
+        init(context).getPrefEditor().putInt(key, value).commit();
+    }
+
+    public static int readPrefInt(Context context, String key) {
+        return init(context).getPreference().getInt(key, DEFAULT_INT_VALUE);
+    }
+
+    public static void writePrefBool(Context context, String key, boolean value) {
+        init(context).getPrefEditor().putBoolean(key, value).commit();
+    }
+
+    public static boolean readPrefBool(Context context, String key) {
+        return init(context).getPreference().getBoolean(key, DEFAULT_BOOLEAN_VALUE);
+    }
+
+    public static void clearPreference(Context context) {
+        init(context).getPreference().edit().clear().apply();
+    }
 
     /*
     public class DateTimePreference {
@@ -109,7 +142,7 @@ public class PrefsHelper {
     */
 
 
-    public class EnumPreference<E extends Enum<E>> {
+    public static class EnumPreference<E extends Enum<E>> {
         private final SharedPreferences preferences;
         private final Class<E> clazz;
         private final String key;
@@ -147,7 +180,7 @@ public class PrefsHelper {
         }
     }
 
-    public class StringPreference {
+    public static class StringPreference {
         private final SharedPreferences preferences;
         private final String key;
         private final String defaultValue;
@@ -180,8 +213,7 @@ public class PrefsHelper {
         }
     }
 
-
-    public class IntPreference {
+    public static class IntPreference {
         private final SharedPreferences preferences;
         private final String key;
         private final int defaultValue;
@@ -213,7 +245,7 @@ public class PrefsHelper {
         }
     }
 
-    public class BooleanPreference {
+    public static class BooleanPreference {
         private final SharedPreferences preferences;
         private final String key;
         private final boolean defaultValue;
