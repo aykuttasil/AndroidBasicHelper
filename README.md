@@ -9,4 +9,6 @@ Android Helper
 - UiHelper
 - SuperHelper
 
-Gradle : compile 'com.aykuttasil:androidbasichelper:1.0.3'
+```
+compile 'com.aykuttasil:androidbasichelperlib:1.0.23'
+```
