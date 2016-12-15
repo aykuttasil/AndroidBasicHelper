@@ -9,6 +9,8 @@ Android Helper
 - UiHelper
 - SuperHelper
 
+# Gradle
+
 ```
-compile 'com.aykuttasil:androidbasichelperlib:1.0.23'
+compile 'com.aykuttasil:androidbasichelperlib:1.0.24'
 ```
