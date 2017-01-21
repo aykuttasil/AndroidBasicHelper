@@ -8,7 +8,6 @@ import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.media.RingtoneManager;
 import android.net.Uri;
-import android.service.carrier.CarrierIdentifier;
 import android.support.v7.app.NotificationCompat;
 
 import java.util.Random;
@@ -55,7 +54,6 @@ public class NotificationHelper {
                 .setContentTitle(title)
                 .setSubText(text)
                 .setContentText(text)
-
                 .build();
 
         notificationManager.notify(notifId, mNotification);
@@ -80,17 +78,16 @@ public class NotificationHelper {
         // AppConfig.NOTIFICATION_ID;
 
 
-        PendingIntent resultPendingIntent =
-                PendingIntent.getActivity(
-                        context,
-                        0,
-                        intent,
-                        PendingIntent.FLAG_ONE_SHOT
-                );
+        PendingIntent resultPendingIntent = PendingIntent.getActivity(context,
+                0,
+                intent,
+                PendingIntent.FLAG_ONE_SHOT
+        );
 
         NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
 
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context);
+
         Notification notification = mBuilder
                 .setSmallIcon(icon)
                 .setTicker(title)
@@ -103,8 +100,8 @@ public class NotificationHelper {
                 .setLargeIcon(BitmapFactory.decodeResource(context.getResources(), icon))
                 .setSubText(message)
                 .setContentText(message)
-
                 .build();
+
         // notification.flags = Notification.FLAG_NO_CLEAR | Notification.FLAG_SHOW_LIGHTS;
         notification.flags = Notification.FLAG_SHOW_LIGHTS;
 

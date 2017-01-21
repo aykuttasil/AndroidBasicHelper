@@ -65,12 +65,16 @@ import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 
+import github.nisrulz.easydeviceinfo.base.EasyConfigMod;
+
 public class SuperHelper {
 
     private static final String TAG = SuperHelper.class.getSimpleName();
 
     public static String getSimState(Context context) {
+
         TelephonyManager telephonymanager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+
         int state = telephonymanager.getSimState();
 
         switch (state) {
@@ -92,7 +96,9 @@ public class SuperHelper {
     }
 
     public static String getBluetoothState(Context context) {
+
         BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+
         if (mBluetoothAdapter == null) {
             return "YOK";
         } else {
@@ -109,8 +115,11 @@ public class SuperHelper {
     public static JSONArray getInstalledApps(Context mContext) {
 
         ArrayList<PackageInfo> res = new ArrayList<PackageInfo>();
+
         PackageManager pm = mContext.getPackageManager();
+
         List<ApplicationInfo> apps = pm.getInstalledApplications(0);
+
         JSONArray jsonarray = new JSONArray();
 
 
@@ -184,7 +193,7 @@ public class SuperHelper {
 
     }
 
-    public static boolean isDeviceRooted() {
+    public static boolean isDeviceRooted(Context context) {
 
         // get from build info
         String buildTags = Build.TAGS;
@@ -205,11 +214,24 @@ public class SuperHelper {
         return false;
     }
 
-    public static String getAccountName(Context mContext) {
+    public static String getAccountName(Context context) {
+
+        EasyConfigMod easyConfigMod = new EasyConfigMod(context);
+
         Pattern emailPattern = Patterns.EMAIL_ADDRESS; // API level 8+
-        Account[] accounts = AccountManager.get(mContext).getAccounts();
+
+        Account[] accounts;
+
+        try {
+            accounts = AccountManager.get(context).getAccounts();
+        } catch (Exception e) {
+            throw e;
+        }
+
         String returnEmail = "";
+
         for (Account account : accounts) {
+
             if (emailPattern.matcher(account.name).matches()) {
                 if (account.type.equals("com.google"))
                     returnEmail = account.name;
@@ -218,6 +240,7 @@ public class SuperHelper {
             }
         }
         return returnEmail;
+
     }
 
     public static String generateRandom(int length) {
@@ -395,7 +418,9 @@ public class SuperHelper {
          */
         //FragmentManager.enableDebugLogging(true);
         FragmentManager fragmentManager = activity.getSupportFragmentManager();
+
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
 
 
         /*
@@ -442,6 +467,7 @@ public class SuperHelper {
     public static void removeAllPopStack(AppCompatActivity activity) {
 
         FragmentManager fm = activity.getSupportFragmentManager();
+
         for (int i = 0; i < fm.getBackStackEntryCount(); ++i) {
             fm.popBackStack();
         }
@@ -565,19 +591,23 @@ public class SuperHelper {
     }
 
     public static String getFormatTimeDate(long time) {
+
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
         Date date = new Date();
         date.setTime(time);
+
         return simpleDateFormat.format(date);
     }
 
     public static void PhoneCall(Activity activity, String phoneNumber) {
+
         Intent callIntent = new Intent(Intent.ACTION_CALL);
+
         callIntent.setData(Uri.parse("tel:" + phoneNumber));
-        if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-            return;
+
+        if (checkPermission(activity, Manifest.permission.CALL_PHONE)) {
+            activity.startActivity(callIntent);
         }
-        activity.startActivity(callIntent);
     }
 
     public static boolean isServiceRunning(Activity activity, String serviceName) {
@@ -640,13 +670,16 @@ public class SuperHelper {
     }
 
     public static boolean checkPermissions(Context context, String[] permissions) {
+
         if (Build.VERSION.SDK_INT >= 23) {
+
             for (String permission : permissions) {
                 if (ActivityCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED) {
                     return false;
                 }
             }
         }
+
         return true;
     }
 
@@ -685,11 +718,83 @@ public class SuperHelper {
                 pendingIntent);
     }
 
+    /**
+     * setInexactRepeating() kullanıldığında sabit aralıklar verilmek zorundadır. Uygulamalar genelde bu şekilde periodic
+     * servislerini çalıştırır. Android, düzenlenmiş diğer işlemlerle aynı anda periodic servisi çalıştıracağından
+     * pil ömrü uzar.
+     * -----
+     * Eğer kendimiz zaman belirlemek istiyorsak (her 10 saniyede bir çalıştır gibi) setRepeating() kullanmamamız gerekir.
+     * -----
+     * Alarmı hemen çalıştırmaya başla ve her 15 dakikada bir tekrarla.
+     * //alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
+     * //SystemClock.currentThreadTimeMillis(),
+     * //AlarmManager.INTERVAL_FIFTEEN_MINUTES,
+     * //pendingIntent);
+     * <p>
+     * //alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP);
+     * <p>
+     * AlarmManager.ELAPSED_REALTIME -> ELAPSED_REALTIME system başlangıcını baz alır. Eğer gerçek saat ile ilgili bir işlem yapılmıcak
+     * ise bu parametre kullanılmalıdır.
+     * RTC -> Cihazın local saatini baz alır. Örneğin perşembe saat 4 de yapılcak bi iş belirlemek istersen RTC kullanmalıyız.
+     *
+     * @param context
+     * @param broadcastReceiverClass
+     * @param isInExect
+     * @param periodicTime
+     * @param requestCode
+     */
+    public void setAlarmRepeating(Context context, Class broadcastReceiverClass, boolean isInExect, long periodicTime, int requestCode) {
+
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+
+        Intent intent = new Intent(context.getApplicationContext(), broadcastReceiverClass);
+
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context,
+                requestCode,
+                intent,
+                PendingIntent.FLAG_UPDATE_CURRENT);
+
+        if (isInExect) {
+
+            if (periodicTime != AlarmManager.INTERVAL_FIFTEEN_MINUTES &&
+                    periodicTime != AlarmManager.INTERVAL_HALF_HOUR &&
+                    periodicTime != AlarmManager.INTERVAL_HOUR &&
+                    periodicTime != AlarmManager.INTERVAL_HALF_DAY &&
+                    periodicTime != AlarmManager.INTERVAL_DAY) {
+
+                alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
+                        SystemClock.elapsedRealtime(),
+                        AlarmManager.INTERVAL_HALF_HOUR,
+                        pendingIntent);
+
+            } else {
+
+                try {
+
+                    throw new Exception("AlarmManager.INTERVAL* değerlerinden birini girmelisiniz.");
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+        } else {
+
+            alarmManager.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
+                    SystemClock.elapsedRealtime(),
+                    periodicTime,
+                    pendingIntent);
+        }
+
+
+    }
+
     public void stopAlarmRepeating(Context context, Class receiverClass, int requestCode) {
 
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 
         Intent intent = new Intent(context.getApplicationContext(), receiverClass);
+
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context,
                 requestCode,
                 intent,
@@ -735,6 +840,7 @@ public class SuperHelper {
 
     public static String getFolderSizeString(File f) {
         long size = 0;
+
         if (f.isDirectory()) {
             for (File file : f.listFiles()) {
                 size += getFolderSize(file);
@@ -775,8 +881,11 @@ public class SuperHelper {
 
             return true;
         } catch (IOException e) {
+
             Log.e("app", e.getMessage());
+
             if (fos != null) {
+
                 try {
                     fos.close();
                 } catch (IOException e1) {
@@ -787,8 +896,41 @@ public class SuperHelper {
         return false;
     }
 
+    /**
+     * Belirtilen dosya daha önce cihaza indirilmiş mi?
+     * Download klasörü kontrol edilir.
+     *
+     * @param checkFileName
+     * @return
+     */
+    public static boolean isAlreadyDownloadFile(String checkFileName) {
+
+        String appPath = Environment.getExternalStorageDirectory() + "/"
+                + Environment.DIRECTORY_DOWNLOADS + "/"
+                + checkFileName;
+
+        return new File(appPath).exists();
+
+    }
+
+    /*
+    private void deneme(Context context) {
 
 
+        EasyAppMod easyAppMod = new EasyAppMod(context);
+
+        EasyBluetoothMod easyBluetoothMod = new EasyBluetoothMod(context);
+
+        EasyIdMod easyIdMod = new EasyIdMod(context);
+
+        EasySimMod easySimMod = new EasySimMod(context);
+
+        EasyDeviceInfo easyDeviceInfo = new EasyDeviceInfo();
+
+        EasyNetworkMod easyNetworkMod = new EasyNetworkMod(context);
+
+    }
+    */
 
 
     /*
