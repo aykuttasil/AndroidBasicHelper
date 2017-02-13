@@ -223,6 +223,7 @@ public class NotificationHelper {
                 .setAutoCancel(true)
                 .setContentIntent(pendingIntent)
                 .build();
+
         return this;
     }
 

@@ -41,6 +41,20 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 
+import com.blankj.utilcode.utils.ActivityUtils;
+import com.blankj.utilcode.utils.ClipboardUtils;
+import com.blankj.utilcode.utils.CloseUtils;
+import com.blankj.utilcode.utils.ConvertUtils;
+import com.blankj.utilcode.utils.CrashUtils;
+import com.blankj.utilcode.utils.DeviceUtils;
+import com.blankj.utilcode.utils.EmptyUtils;
+import com.blankj.utilcode.utils.EncodeUtils;
+import com.blankj.utilcode.utils.FileUtils;
+import com.blankj.utilcode.utils.HandlerUtils;
+import com.blankj.utilcode.utils.NetworkUtils;
+import com.blankj.utilcode.utils.PhoneUtils;
+import com.blankj.utilcode.utils.TimeUtils;
+import com.blankj.utilcode.utils.Utils;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.signature.StringSignature;
 import com.codetroopers.betterpickers.calendardatepicker.CalendarDatePickerDialogFragment;
@@ -64,8 +78,6 @@ import java.util.Random;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
-
-import github.nisrulz.easydeviceinfo.base.EasyConfigMod;
 
 public class SuperHelper {
 
@@ -97,11 +109,13 @@ public class SuperHelper {
 
     public static String getBluetoothState(Context context) {
 
+
         BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 
         if (mBluetoothAdapter == null) {
             return "YOK";
         } else {
+
             if (mBluetoothAdapter.isEnabled()) {
                 return "VAR - ENABLE";
             } else {
@@ -195,28 +209,28 @@ public class SuperHelper {
 
     public static boolean isDeviceRooted(Context context) {
 
-        // get from build info
-        String buildTags = Build.TAGS;
-        if (buildTags != null && buildTags.contains("test-keys")) {
-            return true;
-        }
+        return DeviceUtils.isDeviceRooted();
 
-        // check if /system/app/Superuser.apk is present
-        try {
-            File file = new File("/system/app/Superuser.apk");
-            if (file.exists()) {
-                return true;
-            }
-        } catch (Throwable e1) {
-            // ignore
-        }
-
-        return false;
+//        // get from build info
+//        String buildTags = Build.TAGS;
+//        if (buildTags != null && buildTags.contains("test-keys")) {
+//            return true;
+//        }
+//
+//        // check if /system/app/Superuser.apk is present
+//        try {
+//            File file = new File("/system/app/Superuser.apk");
+//            if (file.exists()) {
+//                return true;
+//            }
+//        } catch (Throwable e1) {
+//            // ignore
+//        }
+//
+//        return false;
     }
 
     public static String getAccountName(Context context) {
-
-        EasyConfigMod easyConfigMod = new EasyConfigMod(context);
 
         Pattern emailPattern = Patterns.EMAIL_ADDRESS; // API level 8+
 
@@ -281,8 +295,8 @@ public class SuperHelper {
     }
 
     public static String getDeviceId(Context context) {
-        TelephonyManager telephonymanager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
-        return telephonymanager.getDeviceId();
+        Utils.init(context);
+        return PhoneUtils.getIMEI();
     }
 
     public static String getSimSerialNumber(Context context) {
@@ -291,8 +305,7 @@ public class SuperHelper {
     }
 
     public static String getOperetorName(Context context) {
-        TelephonyManager telephonymanager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
-        return telephonymanager.getNetworkOperatorName();
+       return NetworkUtils.getNetworkOperatorName();
     }
 
     public static String getDeviceLanguage(Context context) {
@@ -300,6 +313,7 @@ public class SuperHelper {
     }
 
     public static String getDeviceName() {
+
         String manufacturer = Build.MANUFACTURER;
         String model = Build.MODEL;
         if (model.startsWith(manufacturer)) {
@@ -310,6 +324,7 @@ public class SuperHelper {
             return "HTC " + model;
         }
         return capitalize(manufacturer) + " " + model;
+
     }
 
     private static String capitalize(String str) {
@@ -333,8 +348,13 @@ public class SuperHelper {
     }
 
     public static boolean isAppIsInBackground(Context context) {
+
+        //AppUtils.isAppForeground(context)
+
         boolean isInBackground = true;
+
         ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.KITKAT_WATCH) {
             List<ActivityManager.RunningAppProcessInfo> runningProcesses = am.getRunningAppProcesses();
             for (ActivityManager.RunningAppProcessInfo processInfo : runningProcesses) {
@@ -412,6 +432,8 @@ public class SuperHelper {
     }
 
     public static void ReplaceFragmentBeginTransaction(AppCompatActivity activity, Fragment fragment, int containerID, boolean isBackStack) {
+
+
 
         /*
         FragmentManager akışını loglamak istiyorsan comment satırını aktifleştir.
@@ -799,16 +821,20 @@ public class SuperHelper {
                 requestCode,
                 intent,
                 PendingIntent.FLAG_UPDATE_CURRENT);
+
         alarmManager.cancel(pendingIntent);
     }
 
     public static String setRandomImage(Context context, ImageView imageView) {
+
         String randomUrl = "http://lorempixel.com/400/200";
+
         Glide.with(context)
                 .load(randomUrl)
                 .signature(new StringSignature(UUID.randomUUID().toString()))
                 .fitCenter()
                 .into(imageView);
+
         return randomUrl;
     }
 
@@ -827,6 +853,7 @@ public class SuperHelper {
     }
 
     public static long getFolderSize(File f) {
+
         long size = 0;
         if (f.isDirectory()) {
             for (File file : f.listFiles()) {

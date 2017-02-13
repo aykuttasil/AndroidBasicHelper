@@ -3,7 +3,6 @@ package com.aykuttasil.androidbasichelperlib;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
-import android.util.Log;
 
 /**
  * Created by aykutasil on 24.01.2017.
@@ -17,11 +16,11 @@ public class ManifestHelper {
 
         Integer value = getIntMetadata(context, key);
 
-        if (value == null || value.intValue() == 0) {
-            value = Integer.valueOf(1);
+        if (value == null || value == 0) {
+            value = 1;
         }
 
-        return value.intValue();
+        return value;
     }
 
     public static String getMetaDataString(Context context, String key) {
@@ -37,7 +36,7 @@ public class ManifestHelper {
 
     public static boolean getMetaDataBoolean(Context context, String key) {
 
-        return getBooleanMetadata(context, key).booleanValue();
+        return getBooleanMetadata(context, key);
     }
 
     private static String getStringMetadata(Context context, String key) {
@@ -50,7 +49,7 @@ public class ManifestHelper {
             ApplicationInfo applicationInfo = packageManager.getApplicationInfo(context.getPackageName(), PackageManager.GET_META_DATA);
             value = applicationInfo.metaData.getString(key);
         } catch (Exception e) {
-            Log.d("sugar", "Couldn\'t find config value: " + key);
+            e.printStackTrace();
         }
 
         return value;
@@ -64,9 +63,9 @@ public class ManifestHelper {
 
         try {
             ApplicationInfo applicationInfo = packageManager.getApplicationInfo(context.getPackageName(), PackageManager.GET_META_DATA);
-            value = Integer.valueOf(applicationInfo.metaData.getInt(key));
+            value = applicationInfo.metaData.getInt(key);
         } catch (Exception e) {
-            Log.d("sugar", "Couldn\'t find config value: " + key);
+            e.printStackTrace();
         }
 
         return value;
@@ -74,15 +73,15 @@ public class ManifestHelper {
 
     private static Boolean getBooleanMetadata(Context context, String key) {
 
-        Boolean flag = Boolean.valueOf(false);
+        Boolean flag = false;
 
         PackageManager packageManager = context.getPackageManager();
 
         try {
             ApplicationInfo applicationInfo = packageManager.getApplicationInfo(context.getPackageName(), PackageManager.GET_META_DATA);
-            flag = Boolean.valueOf(applicationInfo.metaData.getBoolean(key));
+            flag = applicationInfo.metaData.getBoolean(key);
         } catch (Exception e) {
-            Log.d("sugar", "Couldn\'t find config value: " + key);
+            e.printStackTrace();
         }
 
         return flag;
