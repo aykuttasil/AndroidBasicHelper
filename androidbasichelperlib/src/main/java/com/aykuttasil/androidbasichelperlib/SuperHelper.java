@@ -26,6 +26,7 @@ import android.os.Environment;
 import android.os.PowerManager;
 import android.os.StatFs;
 import android.os.SystemClock;
+import android.support.annotation.RequiresPermission;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -39,25 +40,11 @@ import android.util.Patterns;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
-import android.widget.ImageView;
 
-import com.blankj.utilcode.utils.ActivityUtils;
-import com.blankj.utilcode.utils.ClipboardUtils;
-import com.blankj.utilcode.utils.CloseUtils;
-import com.blankj.utilcode.utils.ConvertUtils;
-import com.blankj.utilcode.utils.CrashUtils;
-import com.blankj.utilcode.utils.DeviceUtils;
-import com.blankj.utilcode.utils.EmptyUtils;
-import com.blankj.utilcode.utils.EncodeUtils;
-import com.blankj.utilcode.utils.FileUtils;
-import com.blankj.utilcode.utils.HandlerUtils;
-import com.blankj.utilcode.utils.NetworkUtils;
-import com.blankj.utilcode.utils.PhoneUtils;
-import com.blankj.utilcode.utils.TimeUtils;
-import com.blankj.utilcode.utils.Utils;
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.signature.StringSignature;
-import com.codetroopers.betterpickers.calendardatepicker.CalendarDatePickerDialogFragment;
+import com.blankj.utilcode.util.DeviceUtils;
+import com.blankj.utilcode.util.NetworkUtils;
+import com.blankj.utilcode.util.PhoneUtils;
+import com.blankj.utilcode.util.Utils;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -70,12 +57,10 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Random;
-import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 
@@ -107,8 +92,8 @@ public class SuperHelper {
         }
     }
 
+    @RequiresPermission(value = Manifest.permission.BLUETOOTH)
     public static String getBluetoothState(Context context) {
-
 
         BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 
@@ -122,8 +107,6 @@ public class SuperHelper {
                 return "VAR - DISABLE";
             }
         }
-
-
     }
 
     public static JSONArray getInstalledApps(Context mContext) {
@@ -230,6 +213,7 @@ public class SuperHelper {
 //        return false;
     }
 
+    @RequiresPermission(value = Manifest.permission.GET_ACCOUNTS)
     public static String getAccountName(Context context) {
 
         Pattern emailPattern = Patterns.EMAIL_ADDRESS; // API level 8+
@@ -305,7 +289,7 @@ public class SuperHelper {
     }
 
     public static String getOperetorName(Context context) {
-       return NetworkUtils.getNetworkOperatorName();
+        return NetworkUtils.getNetworkOperatorName();
     }
 
     public static String getDeviceLanguage(Context context) {
@@ -539,27 +523,6 @@ public class SuperHelper {
         editText.setKeyListener(null);
         editText.setClickable(true);
         //editText.setBackgroundColor(Color.TRANSPARENT);
-    }
-
-    public static void ShowDatePickerViewClick(final EditText editText, final AppCompatActivity activity) {
-        editText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                CalendarDatePickerDialogFragment cdp = new CalendarDatePickerDialogFragment()
-                        .setThemeCustom(R.style.MyCustomBetterPickerTheme)
-                        .setOnDateSetListener(new CalendarDatePickerDialogFragment.OnDateSetListener() {
-                            @Override
-                            public void onDateSet(CalendarDatePickerDialogFragment dialog, int year, int monthOfYear, int dayOfMonth) {
-                                editText.setText(String.valueOf(dayOfMonth) + "/" + String.valueOf(monthOfYear + 1) + "/" + String.valueOf(year));
-                            }
-                        })
-                        .setFirstDayOfWeek(Calendar.MONDAY)
-                        //.setPreselectedDate(towDaysAgo.getYear(), towDaysAgo.getMonthOfYear() - 1, towDaysAgo.getDayOfMonth())
-                        //.setDateRange(minDate, null)
-                        .setThemeDark(true);
-                cdp.show(activity.getSupportFragmentManager(), "DPD");
-            }
-        });
     }
 
     public static Bitmap drawableToBitmap(Drawable drawable) {
@@ -825,6 +788,7 @@ public class SuperHelper {
         alarmManager.cancel(pendingIntent);
     }
 
+    /*
     public static String setRandomImage(Context context, ImageView imageView) {
 
         String randomUrl = "http://lorempixel.com/400/200";
@@ -837,6 +801,7 @@ public class SuperHelper {
 
         return randomUrl;
     }
+    */
 
     public static boolean validateIsEmpty(EditText... editTexts) {
 

@@ -17,7 +17,7 @@ public class NotificationHelper {
     static NotificationCompat.Builder mBuilder;
     static NotificationManager notificationManager;
     static Notification mNotification;
-    static Context mContext;
+    Context mContext;
     static int mNotifId;
     static int mIcon = R.drawable.ok;
     static Uri mSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);

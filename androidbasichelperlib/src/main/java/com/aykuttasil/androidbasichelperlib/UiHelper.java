@@ -123,6 +123,145 @@ public class UiHelper {
         }
     }
 
+//    public static class UiSweetDialog {
+//
+//        Context mContext;
+//        SweetAlertDialog mSweetAlertDialog;
+//
+//        private UiSweetDialog(Context context, int alertDialogType) {
+//            Iconify.with(new FontAwesomeModule());
+//            mContext = context;
+//            mSweetAlertDialog = new SweetAlertDialog(context, alertDialogType);
+//        }
+//
+//        public static UiSweetDialog newInstance(Context context, int alertDialogType) {
+//            return new UiSweetDialog(context, alertDialogType);
+//        }
+//
+//        public SweetAlertDialog getMaterialDialog() {
+//            try {
+//                if (mSweetAlertDialog == null) {
+//                    throw new Exception("mSweetAlertDialog is null");
+//                }
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+//            return mSweetAlertDialog;
+//        }
+//
+//        public static void showSimpleDialog(Context context, String title, String message) {
+//
+//            newInstance(context, SweetAlertDialog.NORMAL_TYPE).mSweetAlertDialog.setTitleText(title).setContentText(message).show();
+//
+//        }
+//
+//        public SweetAlertDialog getIndeterminateDialog(String title, String content) {
+//            return mBuilder
+//                    .title(title)
+//                    .content(content)
+//                    .progress(true, 100, false)
+//                    .progressIndeterminateStyle(true)
+//                    .cancelable(false)
+//                    .icon(new IconDrawable(mContext, FontAwesomeIcons.fa_comment).actionBarSize().color(Color.GRAY))
+//                    .build();
+//        }
+//
+//        public SweetAlertDialog getOKDialog(String title, String content, Drawable icon) {
+//            return mBuilder
+//                    .title(title)
+//                    .content(content)
+//                    .cancelable(false)
+//                    .icon(icon == null ? new IconDrawable(mContext, FontAwesomeIcons.fa_angle_right).actionBarSize().color(Color.GRAY) : icon)
+//                    .onPositive(new MaterialDialog.SingleButtonCallback() {
+//                        @Override
+//                        public void onClick(MaterialDialog dialog, DialogAction which) {
+//                            dialog.dismiss();
+//                        }
+//                    })
+//                    .positiveText("Devam Et")
+//                    .build();
+//        }
+//
+//        public SweetAlertDialog getOKCancelDialog(final String title, String content, final String whenClickOkText, Drawable icon) {
+//
+//            mSweetAlertDialog.setTitleText(title);
+//            mSweetAlertDialog.setContentText(content);
+//            mSweetAlertDialog.setCancelable(false);
+//            mSweetAlertDialog.setCustomImage(icon);
+//            mSweetAlertDialog.setCancelText("İptal Et");
+//            mSweetAlertDialog.setConfirmText("Devam et");
+//
+//            mSweetAlertDialog.setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
+//                @Override
+//                public void onClick(SweetAlertDialog sweetAlertDialog) {
+//                    sweetAlertDialog.dismiss();
+//                }
+//            });
+//
+//            mSweetAlertDialog.setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+//                @Override
+//                public void onClick(SweetAlertDialog sweetAlertDialog) {
+//                    sweetAlertDialog
+//                            .setTitleText(title)
+//                            .setContentText(whenClickOkText)
+//                            .showCancelButton(false)
+//                            .setConfirmText("Tamam")
+//                            .setConfirmClickListener(null)
+//                            .changeAlertType(SweetAlertDialog.SUCCESS_TYPE);
+//                }
+//            });
+//
+//            mSweetAlertDialog.show();
+//
+//            return mSweetAlertDialog;
+//
+//
+//            return mBuilder
+//                    .title(title)
+//                    .content(content)
+//                    .cancelable(false)
+//                    .icon(icon == null ? new IconDrawable(mContext, FontAwesomeIcons.fa_angle_right).actionBarSize().color(Color.GRAY) : icon)
+//                    .onPositive(new MaterialDialog.SingleButtonCallback() {
+//                        @Override
+//                        public void onClick(MaterialDialog dialog, DialogAction which) {
+//                            dialog.dismiss();
+//                        }
+//                    })
+//                    .onNegative(new MaterialDialog.SingleButtonCallback() {
+//                        @Override
+//                        public void onClick(MaterialDialog dialog, DialogAction which) {
+//                            dialog.dismiss();
+//                        }
+//                    })
+//                    .negativeText("İptal Et")
+//                    .positiveText("Devam Et")
+//                    .negativeColor(Color.GRAY)
+//                    .positiveColor(mContext.getResources().getColor(R.color.accent))
+//                    .build();
+//        }
+//
+//        public SweetAlertDialog getProgressDialog(String title, String content, Drawable icon) {
+//
+//            mSweetAlertDialog.setTitleText(title);
+//            mSweetAlertDialog.setContentText(content);
+//            mSweetAlertDialog.getProgressHelper().setBarColor(Color.parseColor("#A5DC86"));
+//            mSweetAlertDialog.setCancelable(false);
+//            mSweetAlertDialog.show();
+//
+//            return mSweetAlertDialog;
+//        }
+//
+//        public SweetAlertDialog getProgressDialog(String content, Drawable icon) {
+//
+//            mSweetAlertDialog.setContentText(content);
+//            mSweetAlertDialog.getProgressHelper().setBarColor(Color.parseColor("#A5DC86"));
+//            mSweetAlertDialog.setCancelable(false);
+//            mSweetAlertDialog.show();
+//
+//            return mSweetAlertDialog;
+//        }
+//    }
+
     public static class UiSnackBar {
         static Context mContext;
         Snackbar snackbar;

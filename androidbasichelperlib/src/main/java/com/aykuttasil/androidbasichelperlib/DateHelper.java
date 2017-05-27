@@ -9,6 +9,7 @@ import java.net.InetAddress;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -38,14 +39,14 @@ public class DateHelper {
     public static String getFormattedDate(Long timestamp) {
         // boolean sameDay = isSameDay(timestamp);
         Date date = new Date(timestamp);
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("hh:mm aa");
-        SimpleDateFormat fullDateFormat = new SimpleDateFormat("dd MMM");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("hh:mm aa", Locale.getDefault());
+        SimpleDateFormat fullDateFormat = new SimpleDateFormat("dd MMM", Locale.getDefault());
         return simpleDateFormat.format(date);
     }
 
     public static String getDate(Long timestamp) {
         Date date = new Date(timestamp);
-        SimpleDateFormat fullDateFormat = new SimpleDateFormat("dd MMM yyyy");
+        SimpleDateFormat fullDateFormat = new SimpleDateFormat("dd MMM yyyy", Locale.getDefault());
         return fullDateFormat.format(date);
     }
 
@@ -62,8 +63,8 @@ public class DateHelper {
     public static String getFormattedDateAndTime(Long timestamp) {
         boolean sameDay = isSameDay(timestamp);
         Date date = new Date(timestamp);
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("hh:mm aa");
-        SimpleDateFormat fullDateFormat = new SimpleDateFormat("dd MMM");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("hh:mm aa", Locale.getDefault());
+        SimpleDateFormat fullDateFormat = new SimpleDateFormat("dd MMM", Locale.getDefault());
         Date newDate = new Date();
 
         try {
@@ -93,7 +94,7 @@ public class DateHelper {
     public static String getDateAndTimeForLastSeen(Long timestamp) {
         boolean sameDay = isSameDay(timestamp);
         Date date = new Date(timestamp);
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("EEE, MMM dd,yyyy");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("EEE, MMM dd,yyyy", Locale.getDefault());
 
         try {
             if (sameDay) {
@@ -160,7 +161,7 @@ public class DateHelper {
 
     public static String getDateAndTimeInDefaultFormat(long timestamp) {
         Date date = new Date(timestamp);
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("EEE, MMM dd,yyyy hh:mm aa");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("EEE, MMM dd,yyyy hh:mm aa", Locale.getDefault());
         return simpleDateFormat.format(date);
     }
 

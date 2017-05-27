@@ -11,11 +11,5 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        PrefsHelper.init(this).writeString("Key", "Value"); // Default Shared Preference
-        PrefsHelper.writePrefString(this, "Ket", "Value"); // same above
-
-        PrefsHelper.init(this, "PrefName").writeString("Key", "Value"); // context Shared Preference and PrefName = PrefName
-
     }
 }
