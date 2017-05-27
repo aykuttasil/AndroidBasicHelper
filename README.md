@@ -14,5 +14,5 @@ Android Helper
 # Gradle
 
 ```
-compile 'com.aykuttasil:androidbasichelperlib:1.0.25'
+compile 'com.aykuttasil:androidbasichelperlib:1.0.26'
 ```
