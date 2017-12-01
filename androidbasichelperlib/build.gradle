@@ -20,11 +20,11 @@ android {
 dependencies {
     testCompile 'junit:junit:4.12'
     compile "com.android.support:design:$supportVersion"
-    compile 'com.afollestad.material-dialogs:core:0.9.4.5'
-    //compile 'com.afollestad.material-dialogs:commons:0.9.4.5'
+    compile 'com.afollestad.material-dialogs:core:0.9.6.0'
+    compile 'com.afollestad.material-dialogs:commons:0.9.6.0'
     compile 'com.joanzapata.iconify:android-iconify-fontawesome:2.2.2'
     compile 'com.code-troopers.betterpickers:library:3.1.0'
-    compile 'com.blankj:utilcode:1.6.2'
+    compile 'com.blankj:utilcode:1.9.8'
 
 
 

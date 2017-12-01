@@ -7,6 +7,7 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.AlarmManager;
+import android.app.Application;
 import android.app.PendingIntent;
 import android.bluetooth.BluetoothAdapter;
 import android.content.ComponentName;
@@ -278,8 +279,8 @@ public class SuperHelper {
 
     }
 
-    public static String getDeviceId(Context context) {
-        Utils.init(context);
+    public static String getDeviceId(Application application) {
+        Utils.init(application);
         return PhoneUtils.getIMEI();
     }
 
