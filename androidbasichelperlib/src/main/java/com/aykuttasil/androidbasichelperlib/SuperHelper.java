@@ -368,7 +368,6 @@ public class SuperHelper {
 
     public static boolean VerifyTCKN(String TCKN) {
         try {
-
             // TCKN'nin her hanesi rakamsal deger icerir.
             Float.parseFloat(TCKN);
             // TCKN 11 hanelidir.
@@ -395,9 +394,11 @@ public class SuperHelper {
             // 1. 3. 5. 7. ve 9. hanelerin toplamının 7 katından, 2. 4. 6. ve 8.
             // hanelerin toplamı cıkartıldıgında, elde edilen sonucun 10'a
             // bölümünden kalan, yani Mod10'u bize 10. haneyi verir.
-            if ((((n1 + n3 + n5 + n7 + n9) * 7) - (n2 + n4 + n6 + n8)) % 10 != n10) {
-                return false;
-            }
+            //if ((((n1 + n3 + n5 + n7 + n9) * 7) - (n2 + n4 + n6 + n8)) % 10 != n10) {
+            //    return false;
+            //}
+
+
             // 1. 2. 3. 4. 5. 6. 7. 8. 9. ve 10. hanelerin toplamindan elde
             // edilen sonucun 10'a bölümünden kalan, yani Mod10'u bize 11.
             // haneyi verir.
