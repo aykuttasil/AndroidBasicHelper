@@ -13,6 +13,8 @@ Android Helper
 
 # Gradle
 
-```
-compile 'com.aykuttasil:androidbasichelperlib:1.0.26'
+
+
+```groovy
+compile 'com.aykuttasil:androidbasichelperlib:1.3.1'
 ```
