@@ -46,6 +46,7 @@ import com.blankj.utilcode.util.DeviceUtils;
 import com.blankj.utilcode.util.NetworkUtils;
 import com.blankj.utilcode.util.PhoneUtils;
 import com.blankj.utilcode.util.Utils;
+import com.codetroopers.betterpickers.calendardatepicker.CalendarDatePickerDialogFragment;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -58,6 +59,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -70,11 +72,8 @@ public class SuperHelper {
     private static final String TAG = SuperHelper.class.getSimpleName();
 
     public static String getSimState(Context context) {
-
         TelephonyManager telephonymanager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
-
         int state = telephonymanager.getSimState();
-
         switch (state) {
             case 0:
                 return "Bilinmiyor";
@@ -95,13 +94,10 @@ public class SuperHelper {
 
     @RequiresPermission(value = Manifest.permission.BLUETOOTH)
     public static String getBluetoothState(Context context) {
-
         BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-
         if (mBluetoothAdapter == null) {
             return "YOK";
         } else {
-
             if (mBluetoothAdapter.isEnabled()) {
                 return "VAR - ENABLE";
             } else {
@@ -111,15 +107,10 @@ public class SuperHelper {
     }
 
     public static JSONArray getInstalledApps(Context mContext) {
-
         ArrayList<PackageInfo> res = new ArrayList<PackageInfo>();
-
         PackageManager pm = mContext.getPackageManager();
-
         List<ApplicationInfo> apps = pm.getInstalledApplications(0);
-
         JSONArray jsonarray = new JSONArray();
-
 
         for (ApplicationInfo app : apps) {
             // Uygulama sistem uygulamasi mi kontrol ediliyor.
@@ -158,7 +149,6 @@ public class SuperHelper {
             }
         }
         return jsonarray;
-
     }
 
     public static float getAvailableInternalMemorySize() {
@@ -192,7 +182,6 @@ public class SuperHelper {
     }
 
     public static boolean isDeviceRooted(Context context) {
-
         return DeviceUtils.isDeviceRooted();
 
 //        // get from build info
@@ -216,11 +205,8 @@ public class SuperHelper {
 
     @RequiresPermission(value = Manifest.permission.GET_ACCOUNTS)
     public static String getAccountName(Context context) {
-
         Pattern emailPattern = Patterns.EMAIL_ADDRESS; // API level 8+
-
         Account[] accounts;
-
         try {
             accounts = AccountManager.get(context).getAccounts();
         } catch (Exception e) {
@@ -228,18 +214,14 @@ public class SuperHelper {
         }
 
         String returnEmail = "";
-
         for (Account account : accounts) {
-
             if (emailPattern.matcher(account.name).matches()) {
                 if (account.type.equals("com.google"))
                     returnEmail = account.name;
                 break;
-
             }
         }
         return returnEmail;
-
     }
 
     public static String generateRandom(int length) {
@@ -258,7 +240,6 @@ public class SuperHelper {
         long days = TimeUnit.MILLISECONDS.toDays(duration);
 
         return days;
-
     }
 
     public static boolean deleteDirectoryContent(File path) {
@@ -276,7 +257,6 @@ public class SuperHelper {
         } catch (Exception ex) {
             return false;
         }
-
     }
 
     public static String getDeviceId(Application application) {
@@ -284,6 +264,7 @@ public class SuperHelper {
         return PhoneUtils.getIMEI();
     }
 
+    @RequiresPermission(value = Manifest.permission.READ_PHONE_STATE)
     public static String getSimSerialNumber(Context context) {
         TelephonyManager telephonymanager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
         return telephonymanager.getSimSerialNumber();
@@ -298,7 +279,6 @@ public class SuperHelper {
     }
 
     public static String getDeviceName() {
-
         String manufacturer = Build.MANUFACTURER;
         String model = Build.MODEL;
         if (model.startsWith(manufacturer)) {
@@ -309,7 +289,6 @@ public class SuperHelper {
             return "HTC " + model;
         }
         return capitalize(manufacturer) + " " + model;
-
     }
 
     private static String capitalize(String str) {
@@ -333,13 +312,10 @@ public class SuperHelper {
     }
 
     public static boolean isAppIsInBackground(Context context) {
-
         //AppUtils.isAppForeground(context)
 
         boolean isInBackground = true;
-
         ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
-
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.KITKAT_WATCH) {
             List<ActivityManager.RunningAppProcessInfo> runningProcesses = am.getRunningAppProcesses();
             for (ActivityManager.RunningAppProcessInfo processInfo : runningProcesses) {
@@ -418,18 +394,12 @@ public class SuperHelper {
     }
 
     public static void ReplaceFragmentBeginTransaction(AppCompatActivity activity, Fragment fragment, int containerID, boolean isBackStack) {
-
-
-
         /*
         FragmentManager akışını loglamak istiyorsan comment satırını aktifleştir.
          */
         //FragmentManager.enableDebugLogging(true);
         FragmentManager fragmentManager = activity.getSupportFragmentManager();
-
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-
-
 
         /*
         Eğer daha önce yüklenen bir fragment tekrar yüklenmeye çalışılıyor ise replace yapmak yerine popstack ile yükleme yapıyoruz.
@@ -473,9 +443,7 @@ public class SuperHelper {
     }
 
     public static void removeAllPopStack(AppCompatActivity activity) {
-
         FragmentManager fm = activity.getSupportFragmentManager();
-
         for (int i = 0; i < fm.getBackStackEntryCount(); ++i) {
             fm.popBackStack();
         }
@@ -586,12 +554,10 @@ public class SuperHelper {
         return simpleDateFormat.format(date);
     }
 
+    @RequiresPermission(value = Manifest.permission.CALL_PHONE)
     public static void PhoneCall(Activity activity, String phoneNumber) {
-
         Intent callIntent = new Intent(Intent.ACTION_CALL);
-
         callIntent.setData(Uri.parse("tel:" + phoneNumber));
-
         if (checkPermission(activity, Manifest.permission.CALL_PHONE)) {
             activity.startActivity(callIntent);
         }
@@ -898,13 +864,33 @@ public class SuperHelper {
      * @return
      */
     public static boolean isAlreadyDownloadFile(String checkFileName) {
-
         String appPath = Environment.getExternalStorageDirectory() + "/"
                 + Environment.DIRECTORY_DOWNLOADS + "/"
                 + checkFileName;
 
         return new File(appPath).exists();
+    }
 
+
+    public static void ShowDatePickerViewClick(final EditText editText, final AppCompatActivity activity) {
+        editText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CalendarDatePickerDialogFragment cdp = new CalendarDatePickerDialogFragment()
+                        .setThemeCustom(R.style.MyCustomBetterPickerTheme)
+                        .setOnDateSetListener(new CalendarDatePickerDialogFragment.OnDateSetListener() {
+                            @Override
+                            public void onDateSet(CalendarDatePickerDialogFragment dialog, int year, int monthOfYear, int dayOfMonth) {
+                                editText.setText(String.valueOf(dayOfMonth) + "/" + String.valueOf(monthOfYear + 1) + "/" + String.valueOf(year));
+                            }
+                        })
+                        .setFirstDayOfWeek(Calendar.MONDAY)
+                        //.setPreselectedDate(towDaysAgo.getYear(), towDaysAgo.getMonthOfYear() - 1, towDaysAgo.getDayOfMonth())
+                        //.setDateRange(minDate, null)
+                        .setThemeDark();
+                cdp.show(activity.getSupportFragmentManager(), "DPD");
+            }
+        });
     }
 
 }
