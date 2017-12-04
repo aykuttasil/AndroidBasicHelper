@@ -1,3 +1,5 @@
+[![](https://jitpack.io/v/aykuttasil/AndroidBasicHelper.svg)](https://jitpack.io/#aykuttasil/AndroidBasicHelper)
+
 # AndroidBasicHelper
 
 Android Helper
@@ -22,5 +24,5 @@ allprojects {
 ```
 
 ```groovy
-compile 'com.aykuttasil:androidbasichelperlib:1.3.1'
+compile "com.aykuttasil:androidbasichelperlib:$latestRelease"
 ```
