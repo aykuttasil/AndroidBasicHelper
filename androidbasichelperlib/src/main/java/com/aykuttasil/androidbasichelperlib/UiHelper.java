@@ -263,7 +263,6 @@ public class UiHelper {
 //    }
 
     public static class UiSnackBar {
-        static Context mContext;
         Snackbar snackbar;
 
         private UiSnackBar(View view, String text, int duration) {
@@ -271,24 +270,21 @@ public class UiHelper {
         }
 
         public static Snackbar newInstance(View view, String text, int duration) {
-
             return new UiSnackBar(view, text, duration).snackbar;
-
         }
 
         public static UiSnackBar newInstance(Context context, View view) {
-            mContext = context;
             return new UiSnackBar(view, null, Snackbar.LENGTH_LONG);
-
         }
 
         public static void showSimpleSnackBar(View view, String text, int duration) {
+            if (view == null) return;
+
             Snackbar snackbar = Snackbar.make(view, text, duration);
-            TextView textView = (TextView) snackbar.getView().findViewById(R.id.snackbar_text);
+            TextView textView = snackbar.getView().findViewById(R.id.snackbar_text);
             textView.setTextColor(Color.WHITE);
 
             snackbar.show();
-
         }
 
         private static ViewGroup findSuitableParent(View view) {
