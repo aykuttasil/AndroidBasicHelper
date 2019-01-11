@@ -21,14 +21,34 @@ jobs:
           key: jars-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}
       - run:
           name: Release build
-          command: ./gradlew assembleRelease --no-daemon --stacktrace
+          command: ./gradlew androidbasichelperlib:assembleRelease --no-daemon --stacktrace
+      - store_artifacts:
+          path: androidbasichelperlib/build/outputs/aar/
+          destination: artifacts/
       - run:
           name: Test
-          command: ./gradlew testRelease
+          command: ./gradlew androidbasichelperlib:testRelease
+      - store_artifacts:
+          path: androidbasichelperlib/build/reports/tests/
+          destination: test/
       - store_test_results:
-          path: app/build/test-results
+          path: androidbasichelperlib/build/test-results
+  publish-github-release:
+    docker:
+      - image: cibuilds/github:0.10
+    steps:
+      - attach_workspace:
+          at: ./artifacts
+      - run:
+          name: "Publish Release on GitHub"
+          command: |
+            VERSION=$(1.5.0 --version)
+            ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} -delete ${VERSION} ./artifacts/
 workflows:
   version: 2
   workflow:
     jobs:
     - build
+    - publish-github-release:
+        requires:
+          - build
