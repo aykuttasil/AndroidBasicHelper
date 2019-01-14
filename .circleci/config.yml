@@ -1,7 +1,7 @@
 version: 2
 jobs:
   build:
-    working_directory: ~/code
+    working_directory: /code
     docker:
       - image: circleci/android:api-28-alpha
     environment:
@@ -39,6 +39,8 @@ jobs:
     steps:
       - attach_workspace:
           at: ./code/artifacts
+      - run:
+          - print $(ls ./code/artifacts)
       - run:
           name: "Publish Release on GitHub"
           command: |
