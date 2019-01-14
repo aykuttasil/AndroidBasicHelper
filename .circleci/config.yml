@@ -22,6 +22,10 @@ jobs:
       - run:
           name: Release build
           command: ./gradlew androidbasichelperlib:assembleRelease --no-daemon --stacktrace
+      - persist_to_workspace:
+          root: /artifacts
+          paths:
+            - androidbasichelperlib/build/outputs/aar/
       - store_artifacts:
           path: androidbasichelperlib/build/outputs/aar/
           destination: artifacts/
@@ -38,17 +42,11 @@ jobs:
       - image: cibuilds/github:0.10
     steps:
       - attach_workspace:
-          at: ./artifacts
+          at: /artifacts
       - run:
           command: |
-            echo $(ls ./code/artifacts)
+            echo $(ls)
             pwd
-            echo $(ls)
-            cd code
-            echo $(ls)
-            cd artifacts
-            echo $(ls)
-            echo 'test'
       - run:
           name: "Publish Release on GitHub"
           command: |
