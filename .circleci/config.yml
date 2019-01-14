@@ -40,7 +40,7 @@ jobs:
       - attach_workspace:
           at: ./code/artifacts
       - run:
-          - print $(ls ./code/artifacts)
+          command: print $(ls ./code/artifacts)
       - run:
           name: "Publish Release on GitHub"
           command: |
