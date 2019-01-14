@@ -38,13 +38,15 @@ jobs:
       - image: cibuilds/github:0.10
     steps:
       - attach_workspace:
-          at: ./code/artifacts
+          at: ./artifacts
       - run:
           command: |
             echo $(ls ./code/artifacts)
             pwd
             echo $(ls)
             cd code
+            echo $(ls)
+            cd artifacts
             echo $(ls)
             echo 'test'
       - run:
