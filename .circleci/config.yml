@@ -44,12 +44,14 @@ jobs:
             echo $(ls ./code/artifacts)
             pwd
             echo $(ls)
+            cd code
+            echo $(ls)
             echo 'test'
       - run:
           name: "Publish Release on GitHub"
           command: |
             VERSION=v1.5.0
-            ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} -delete ${VERSION} artifacts/
+            ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} -delete ${VERSION} ./code/artifacts/
 workflows:
   version: 2
   workflow:
