@@ -226,13 +226,12 @@ open class SuperHelper {
                     //String description = (String)app.loadDescription(pm);
                     val label = app.loadLabel(pm).toString()
                     val packageName = app.packageName
-                    var versionName = ""
+                    var versionName : String? = null
                     var versionNumber = 0
                     try {
                         versionName = pm.getPackageInfo(packageName, 0).versionName
                         versionNumber = pm.getPackageInfo(packageName, 0).versionCode
                     } catch (e1: PackageManager.NameNotFoundException) {
-                        // TODO Auto-generated catch block
                         e1.printStackTrace()
                     }
 
@@ -240,7 +239,7 @@ open class SuperHelper {
                         //obj.put("description", description);
                         obj.put("label", label)
                         obj.put("packageName", packageName)
-                        obj.put("verName", versionName)
+                        obj.put("verName", versionName ?: "")
                         obj.put("verCode", versionNumber)
                     } catch (e: JSONException) {
                         // TODO Auto-generated catch block

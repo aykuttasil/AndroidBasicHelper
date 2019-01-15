@@ -151,4 +151,11 @@ class SuperHelperTest {
         assertEquals("VAR - DISABLE", result)
     }
 
+
+    @Test
+    fun testX() {
+        val a =  SuperHelper.getInstalledApps(InstrumentationRegistry.getInstrumentation().context).toString()
+        print(a)
+    }
+
 }
