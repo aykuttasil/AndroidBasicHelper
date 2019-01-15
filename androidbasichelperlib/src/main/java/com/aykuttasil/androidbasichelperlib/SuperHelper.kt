@@ -54,7 +54,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
 
-class SuperHelper {
+open class SuperHelper {
 
     fun printHashKey(context: Context, packageName: String) {
         try {

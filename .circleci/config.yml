@@ -50,8 +50,8 @@ jobs:
       - run:
           name: "Publish Release on GitHub"
           command: |
-            VERSION=v1.5.0
-            ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} -delete ${VERSION} androidbasichelperlib/build/outputs/artifacts
+            VERSION=v1.5.1
+            ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} -delete ${VERSION} androidbasichelperlib/build/outputs/artifactsa
 workflows:
   version: 2
   workflow:
