@@ -39,10 +39,10 @@ dependencies {
     // testImplementation "org.mockito:mockito-core:2.23.4"
 
     implementation 'com.google.android.material:material:1.0.0'
-    implementation 'com.afollestad.material-dialogs:core:0.9.6.0'
-    implementation 'com.afollestad.material-dialogs:commons:0.9.6.0'
-    implementation 'com.joanzapata.iconify:android-iconify-fontawesome:2.2.2'
-    implementation 'com.code-troopers.betterpickers:library:3.1.0'
+    api 'com.afollestad.material-dialogs:core:0.9.6.0'
+    api 'com.afollestad.material-dialogs:commons:0.9.6.0'
+    api 'com.joanzapata.iconify:android-iconify-fontawesome:2.2.2'
+    api 'com.code-troopers.betterpickers:library:3.1.0'
     implementation 'com.blankj:utilcode:1.9.8'
 
     implementation "androidx.core:core-ktx:1.0.1"
