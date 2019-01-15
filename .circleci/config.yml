@@ -23,9 +23,9 @@ jobs:
           name: Release build
           command: ./gradlew androidbasichelperlib:assembleRelease --no-daemon --stacktrace
       - persist_to_workspace:
-          root: /artifacts
+          root: androidbasichelperlib/build/outputs/
           paths:
-            - androidbasichelperlib/build/outputs/aar/
+            - aar/*
       - store_artifacts:
           path: androidbasichelperlib/build/outputs/aar/
           destination: artifacts/
@@ -42,7 +42,7 @@ jobs:
       - image: cibuilds/github:0.10
     steps:
       - attach_workspace:
-          at: /artifacts
+          at: androidbasichelperlib/build/outputs/artifacts
       - run:
           command: |
             echo $(ls)
@@ -51,7 +51,7 @@ jobs:
           name: "Publish Release on GitHub"
           command: |
             VERSION=v1.5.0
-            ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} -delete ${VERSION} ./code/artifacts/
+            ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} -delete ${VERSION} androidbasichelperlib/build/outputs/artifacts
 workflows:
   version: 2
   workflow:
