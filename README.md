@@ -24,5 +24,5 @@ allprojects {
 ```
 
 ```groovy
-compile "com.aykuttasil:androidbasichelperlib:$latestRelease"
+implementation "com.aykuttasil:androidbasichelperlib:$latestRelease"
 ```
