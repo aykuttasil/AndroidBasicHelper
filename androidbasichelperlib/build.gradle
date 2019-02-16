@@ -21,8 +21,8 @@ android {
 
 dependencies {
     // testImplementation "junit:junit:4.12"
-    testImplementation "org.robolectric:robolectric:4.0.2"
-    testImplementation "com.squareup.okhttp3:mockwebserver:3.8.1"
+    testImplementation "org.robolectric:robolectric:4.1"
+    testImplementation "com.squareup.okhttp3:mockwebserver:3.12.1"
     testImplementation "androidx.test:core:1.1.0"
     testImplementation 'androidx.test:runner:1.1.1'
     testImplementation 'androidx.test:rules:1.1.1'
@@ -48,43 +48,3 @@ dependencies {
     implementation "androidx.core:core-ktx:1.0.1"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }
-repositories {
-    mavenCentral()
-}
-
-
-/*
-ext {
-    bintrayRepo = 'maven'
-    bintrayName = 'basic-helper'
-    orgName = 'aykuttasil'
-
-    publishedGroupId = 'com.aykuttasil'
-    libraryName = 'Android Basic Helper'
-    artifact = 'androidbasichelperlib' // module ile aynı isimde olması gerekiyor
-
-    libraryDescription = 'Android Basic Helper'
-
-    siteUrl = 'https://github.com/aykuttasil/AndroidBasicHelper'
-    gitUrl = 'https://github.com/aykuttasil/AndroidBasicHelper.git'
-
-    libraryVersion = rootProject.ext.libraryVersion
-
-    developerId = 'aykuttasil'
-    developerName = 'Aykut Asil'
-    developerEmail = 'aykuttasil@gmail.com'
-
-    licenseName = 'The Apache Software License, Version 2.0'
-    licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-    allLicenses = ["Apache-2.0"]
-}
-
-if (project.rootProject.file('local.properties').exists()) {
-    apply from: rootProject.file('gradle/install-v1.gradle')
-    apply from: rootProject.file('gradle/bintray-android-v1.gradle')
-}
-*/
-
-// ./gradlew clean install bintrayUpload
-
-
