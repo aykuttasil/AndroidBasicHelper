@@ -12,4 +12,8 @@
         <!--<item name="bpKeyboardIndicatorColor">@color/custom_keyboard_indicator_color</item>-->
     </style>
 
+    <style name="MyMaterialDialogTheme" parent="Theme.MaterialComponents.Dialog">
+        <item name="md_corner_radius">16dp</item>
+    </style>
+
 </resources>
